@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script> 
+      $(function(){
+        $("footer").load("footer.html"); 
+        $("header").load("header.html");
+      });
+    </script>
+</head>
+<body>
+    <iframe scrolling='no' frameborder='1' allowfullscreen='false' style="height: 500px;width: 500px;position:absolute;top: 250px;bottom: 500px; left: 60%;border-radius:20px; box-shadow: 0px 0px 10px 10px red"src='https://www.3dcontentcentral.com/external-site-embed.aspx?format=3D&catalogid=171&modelid=2032611&width=250&height=250&edraw=true' name='PreviewFrame3D' id='PreviewFrame3D' width='400' height='355'></iframe><a href='https://www.3dcontentcentral.com/download-model.aspx?catalogid=171&id=2032611'></a>
+    <header>
+      <div id="header"></div>
+    </header>
+    <div class="projectshero" id="home">
+        <div class="hero__container">
+            <h1 class="hero__heading">Project Portfolio</h1>
+            <h2 class="hero__description">Dewpoint 1.0</h2>
+            <h3>Purpose: <br>
+              Dewpoint is a personal project with funding acquired from WPI Makerbucks program. The purpose and goal of this project other
+              than to learn more about Arduino, 3D printing, and circuitry, was to keep my plants safe and healthy. <br><br>
+              Method: <br>
+              Working with an Arduino Uno
+              I have set up a system to take values from sensors to determine soil moisture levels and then adjust the moisture levels with 
+              water pumps. <br><br>
+              Future Improvements to be made: <br>
+              Succulent plants can get sunburnt if facing the same
+              direction towards the sun for too long. Future iterations will include a rotating platform to spin the succulents
+              Other desirable improvements include camera live feed as a backup option to the soil moisture sensor and additional for 
+              documenting growing cycle of plants<br>
+              <br>Water can also be obtained from reclaimation of atmospheric moisture, future iterations will make the project entirely self sustainable
+            </h3>
+        </div>
+    </div>
+    <footer>
+      <div id="footer"></div>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>

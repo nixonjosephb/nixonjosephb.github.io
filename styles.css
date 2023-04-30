@@ -1,0 +1,587 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Kumbh Sans', sans-serif;
+    scroll-behavior: smooth;
+}
+
+/* footer {
+    background: #3586ff;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    margin-bottom: 0;
+  } */
+  header{
+    background: #1d1d32;
+    /* background-image: url(images/background.png); */
+    /* padding-bottom: 200px; */
+    /* padding-top:-200px ; */
+    /* background-size:cover ; */
+  }
+  .hero {
+    background:#3a3a3a;
+    padding: 400px 0;
+    background-image: url(images/background3.jpg);
+    background-size:cover;
+    color: #fff;
+    /* padding-top: 100px; */
+    /* padding-bottom: 100px; */
+
+  }
+  .contact-form{
+    background: #3a3a3a;
+    padding: 420px 0;
+    background-image: url(images/background3.jpg);
+    background-size:cover;
+    color: #fff;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    outline:none;
+    margin-top: 50px;
+    
+  }
+  .abouthero{
+    background:#3a3a3a;
+    padding: 100px 50px;
+    background-image: url(images/background3.jpg);
+    background-size:cover;
+    color: #fff;
+  }
+  .abouthero h1{
+    background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color:transparent; 
+    font-size: 5rem;
+    position: absolute;
+    text-align: center;
+    left: 33%;
+    bottom: 80%;
+  }
+
+  .grid {
+    padding: 1em;
+    display: grid;
+    grid-gap: 1em;
+    grid-template-columns: 1fr 1fr 1fr 1fr ;
+    grid-template-rows: 24em 24em 24em;
+
+  }
+  
+  .item { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    /* grid-template-rows: 100px 100px; */
+  }
+  .threed { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    background-image: url(SkillLogos/3dprinter.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 20px;
+  }
+  .ansys { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    background-image: url(SkillLogos/ansys.png);
+    background-size: contain;
+    color: #fff;
+    background-repeat: no-repeat;
+
+  }
+  .arduino { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    background-image: url(SkillLogos/arduino.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 0px;
+  }
+  .drill { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    background-image: url(SkillLogos/drill.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .esprit { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    background-image: url(SkillLogos/esprit.webp);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 5px;
+    
+  }
+  .googledrive { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    background-image: url(SkillLogos/googledrive.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 20px;
+  }
+  .matlab { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    background-image: url(SkillLogos/Matlab.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .onshape { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    background-image: url(SkillLogos/Onshape.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 10px;
+  }
+  .outlook { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    background-image: url(SkillLogos/outlook.png);
+    background-position: 0px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .solidworks { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    background-image: url(SkillLogos/solidworks.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 0px;
+  }
+  .Resume { 
+    background: #3a3a3a;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 0px;
+    grid-column: 3/5;
+    
+  }
+  #hero {
+    background-image: url(https://upload.wikimedia.org/wikipedia/commons/4/4e/Basketball_Goal.jpg);
+    background-size:cover;
+    background-position: center;
+  }
+
+  .homehero {
+    background:#3a3a3a;
+    padding: 420px 0;
+    background-image: url(images/background3.jpg);
+    background-size:cover;
+    color: #fff;
+  }
+  .homehero h1{
+    position: absolute;
+    bottom: 55%;
+    left: 20%;
+  }
+  .homehero h2{
+    position: absolute;
+    bottom: 45%;
+    left: 20%;
+  }
+.projectshero {
+  background:#3a3a3a;
+  padding: 420px 0;
+  background-image: url(images/background3.jpg);
+  background-size:cover;
+  color: #3586ff;
+  /* padding-top: 100px; */
+  /* padding-bottom: 100px; */
+}
+.projectshero h1{
+  background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color:transparent; 
+  font-size: 5rem;
+  position: absolute;
+  text-align: center;
+  left: 33%;
+  bottom: 80%;
+}
+.projectshero h2{
+  background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color:transparent;
+  font-size: 3rem; 
+  position: absolute;
+  bottom: 65%;
+  left: 5%;
+}
+.projectshero h3{
+  float: left;
+  width: 48%;
+  position: absolute;
+  left: 5%;
+  bottom: 20%;
+  background: #3a3a3a;
+  border-radius: 15px;
+  background-size: 50px;
+  padding: 10px;
+}
+
+.navbar{
+    background: #3a3a3a;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.navbar__container{
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    z-index: 1;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 50px;
+}
+
+#navbar__logo{
+    background-color: #ff8177;
+    background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color:transparent;
+    display: flex;
+    align-items: center;
+    position:relative;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2rem;
+}
+
+
+.navbar__menu{
+    display: flex;
+    align-items: center;
+    position: relative;
+    list-style: none;
+}
+
+.navbar__item{
+    height: 80px;
+}
+
+.navbar__links{
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 125px;
+    text-decoration: none;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.navbar__btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    width: 100%;
+}
+
+.button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    height: 100%;
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    background: #f77062;
+    color: #fff;
+}
+
+.button:hover{
+    background: #4837ff;
+    transition: all 0.3s ease;
+}
+
+.navbar__links:hover{
+    color: #f77062;
+    transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 960px) {
+    .navbar__container {
+        display: flex;
+        justify-content: space-between;
+        height: 80px;
+        z-index: 1;
+        width: 100%;
+        max-width: 2000px;
+        padding: 0;
+    }
+
+    .navbar__menu {
+        display: grid;
+        grid-template-columns: auto;
+        margin: 0;
+        width: 100%;
+        position: absolute;
+        top: -1000px;
+        opacity: 0;
+        transition: all 0.5s ease;
+        z-index: -1;
+    }
+
+    .navbar__menu.active {
+        background: #3a3a3a;
+        top: 100%;
+        opacity: 1;
+        transition: all 0.5s ease;
+        z-index: 99;
+        height: 60vh;
+        font-size: 1.6rem;
+    }
+    }
+
+
+
+    /* .navbar__toggle .bar{
+        width: 25px;
+        height: 3px;
+        margin: 5px auto;
+        transition: all 0.3s ease-in-out;
+        background: #fff;
+    } */
+
+    .navbar_item{
+        width: 100%;
+    }
+
+    .navbar__links{
+        position: relative;
+        text-align: center;
+        padding: 2rem;
+        width: 100%;
+        display: table;
+        left: 200px;
+    }
+
+    .navbar__btn{
+        padding-bottom: 2rem;
+        width: 100%;
+    }
+    .button{
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+        height: 80px;
+        margin: 10px;
+    }
+    #navbar__logo{
+      padding-left: 25px;
+  }
+    #mobile-menu{
+        position: absolute;
+        top: 20%;
+        right: 5%;
+        transform: translate(5%, 20%);
+    }
+  
+    .navbar__toggle .bar{
+        position: relative;
+        display: block;
+        cursor: pointer;
+        bottom: -7px;
+    }
+  
+    #mobile-menu.is-active .bar:nth-child(2) {
+        opacity: 0;
+      }
+    
+      #mobile-menu.is-active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+      }
+    
+      #mobile-menu.is-active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+
+      footer
+      {
+        position: relative;
+        width: 100%;
+        background: #3586ff;
+        min-height: 100px;
+        padding: 20px 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      footer .socials
+      {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+        flex-wrap: wrap;
+      }
+      footer .copyright
+      {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+      }
+      footer .socials li
+      {
+        list-style: none;
+      }
+      footer .socials li a
+      {
+        font-size: 2em;
+        color: #fff;
+        margin: 0 10px;
+        display: inline-block;
+        transition: 0.5s;
+      }
+      footer .socials li a:hover
+      {
+        transform: translateY(-10px);
+      }
+      footer .wave
+      {
+        position: absolute;
+        top: -100px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url(wave.png);
+        background-size: 1000px 100px;
+      }
+      footer .wave#wave1
+      {
+        z-index: 1000;
+        opacity: 1;
+        bottom: 0;
+        animation: animateWave 4s linear infinite;
+      }
+      footer .wave#wave2
+      {
+        z-index: 999;
+        opacity: 0.5;
+        bottom: 10px;
+        animation: animateWave_02 4s linear infinite;
+      }
+      footer .wave#wave3
+      {
+        z-index: 1000;
+        opacity: 0.2;
+        bottom: 15px;
+        animation: animateWave_03 3s linear infinite;
+      }
+      footer .wave#wave4
+      {
+        z-index: 999;
+        opacity: 0.7;
+        bottom: 20px;
+        animation: animateWave_04 3s linear infinite;
+      }
+      @keyframes animateWave 
+      {
+        0%
+        {
+            background-position-x: 1000px;
+        }
+        100%
+        {
+            background-position-x: 0px;
+        }
+      }
+      @keyframes animateWave_02 
+      {
+        0%
+        {
+            background-position-x: 0px;
+        }
+        100%
+        {
+            background-position-x: 1000px;
+        }
+      }
+      @keyframes animateWave_03 
+      {
+        0%
+        {
+            background-position-x: 0px;
+        }
+        100%
+        {
+            background-position-x: 1000px;
+        }
+      }
+      @keyframes animateWave_04 
+      {
+        0%
+        {
+            background-position-x: 0px;
+        }
+        100%
+        {
+            background-position-x: 1000px;
+        }
+      }
+
+
+

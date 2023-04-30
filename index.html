@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script> 
+      $(function(){
+        $("footer").load("footer.html"); 
+        $("header").load("header.html");
+      });
+    </script>
+</head>
+<body>
+  <header>
+    <div id="header"></div>
+  </header>
+    <div class="homehero" id="home" img src="selfie.png">
+        <div class="hero__container">
+          <img src="images/selfie.png" alt="self" width="350px" height="350px" style="position: absolute; top: 250px;bottom: 500px; left: 60%;">
+            <h1 class="hero__heading">Hello,<br>
+            I'm Joseph Nixon</h1>
+            <h2>Current WPI student  <br>Future Bionics Engineer</h2>
+        </div>
+    </div>
+    <footer>
+      <div id="footer"></div>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>
