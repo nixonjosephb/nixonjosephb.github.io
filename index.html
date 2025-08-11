@@ -242,18 +242,34 @@
       });
     }
 
+    function resetModal() {
+      // Clear form inputs
+      document.getElementById('motorForm').reset();
+      // Clear results
+      document.getElementById('result').innerHTML = '';
+      // Reset modal position to center
+      centerModal();
+    }
+
     openMotorBtn.onclick = () => {
       motorModal.style.display = "block";
+      // Clear previous results (optional, if you want fresh start)
+      document.getElementById('result').innerHTML = '';
+      // Reset any transform styles
+      modalContent.style.transform = 'none';
+      // Center modal vertically on open
       centerModal();
     };
 
     closeMotorBtn.onclick = () => {
       motorModal.style.display = "none";
+      resetModal();
     };
 
     window.onclick = event => {
       if (event.target === motorModal) {
         motorModal.style.display = "none";
+        resetModal();
       }
     };
 
