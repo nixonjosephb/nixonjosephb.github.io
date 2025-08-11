@@ -161,7 +161,7 @@
 
     <!-- Modal -->
     <div id="motorModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" id="modalContentwhere ">
             <span class="close" id="closeMotorModal">&times;</span>
             <h2>Motor Selector</h2>
               <form id="motorForm">
@@ -333,11 +333,12 @@
         resultDiv.textContent = "No matching motors found. Try adjusting your specs.";
         centerModal(); // Still re-center to account for content change
       }
-      window.addEventListener('resize', () => {
-        if (motorModal.style.display === 'block') {
-          centerModal();
-        }
-      });
+    });
+
+    window.addEventListener('resize', () => {
+      if (motorModal.style.display === 'block') {
+        centerModal();
+      }
     });
   </script>
 </body>
