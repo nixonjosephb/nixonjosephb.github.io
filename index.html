@@ -76,7 +76,7 @@
             height: 100%;
             overflow-y: auto; /* allow full page scroll */
             background-color: rgba(0,0,0,0.5);
-            padding: 50px 0; /* adds breathing room top/bottom */
+            padding: 0; /* adds breathing room top/bottom */
         }
         .modal-content {
             background-color: white;
@@ -234,12 +234,10 @@
   const modalContent = document.getElementById("modalContent");
 
   function centerModal() {
-    requestAnimationFrame(() => {
-      const modalHeight = modalContent.offsetHeight;
-      const screenHeight = document.documentElement.clientHeight;
-      const newTop = Math.max((screenHeight - modalHeight) / 2, 20);
-      modalContent.style.top = `${newTop}px`;
-    });
+    const modalHeight = modalContent.offsetHeight;
+    const screenHeight = document.documentElement.clientHeight;
+    const newTop = Math.max((screenHeight - modalHeight) / 2, 20);
+    modalContent.style.top = `${newTop}px`;
   }
 
   function resetModal() {
@@ -249,10 +247,9 @@
   }
 
   openMotorBtn.onclick = () => {
-  motorModal.style.display = "block";
-
+    motorModal.style.display = "block";
     requestAnimationFrame(() => {
-      centerModal(); // Center after the browser paints the modal
+      requestAnimationFrame(centerModal);
     });
   };
 
@@ -326,7 +323,9 @@
       resultDiv.textContent = "No matching motors found. Try adjusting your specs.";
     }
 
-    setTimeout(centerModal, 0); // ensure it's centered after new content renders
+    requestAnimationFrame(() => {
+      requestAnimationFrame(centerModal);
+    });
   });
 
   window.addEventListener('resize', () => {
