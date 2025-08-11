@@ -281,41 +281,44 @@ document.getElementById('motorForm').addEventListener('submit', function (e) {
     const modalContent = document.querySelector('.modal-content');
 
     if (matches.length > 0) {
-        matches.forEach(motor => {
-            const card = document.createElement("div");
-            card.className = "motor-card";
-            card.style.marginTop = "20px";
-            card.style.padding = "10px";
-            card.style.border = "1px solid #ddd";
-            card.style.borderRadius = "10px";
-            card.style.textAlign = "center";
+    // Clear previous results
+    resultDiv.innerHTML = '';
 
-            card.innerHTML = `
-                <a href="${motor.link}" target="_blank">
-                    <img src="${motor.image}" alt="${motor.name}" class="motor-image" style="max-width: 100%; height: auto; margin-bottom: 10px;">
-                </a>
-                <div class="motor-info">
-                    <strong>${motor.name}</strong><br>
-                    Type: ${motor.type.charAt(0).toUpperCase() + motor.type.slice(1)}<br>
-                    Torque: ${motor.torque} Nm<br>
-                    RPM: ${motor.rpm}<br>
-                    Voltage: ${motor.voltage} V<br>
-                    Wattage: ${motor.wattage} W
-                </div>
-            `;
-            resultDiv.appendChild(card);
-        });
+    matches.forEach(motor => {
+        const card = document.createElement("div");
+        card.className = "motor-card";
+        card.style.marginTop = "20px";
+        card.style.padding = "10px";
+        card.style.border = "1px solid #ddd";
+        card.style.borderRadius = "10px";
+        card.style.textAlign = "center";
 
-        // 🛠 Recenter modal with updated height
-        requestAnimationFrame(() => {
-            const modalHeight = modalContent.offsetHeight;
-            modalContent.style.top = "50%";
-            modalContent.style.transform = `translateY(-${modalHeight / 2}px)`;
-        });
+        card.innerHTML = `
+            <a href="${motor.link}" target="_blank">
+                <img src="${motor.image}" alt="${motor.name}" class="motor-image" style="max-width: 100%; height: auto; margin-bottom: 10px;">
+            </a>
+            <div class="motor-info">
+                <strong>${motor.name}</strong><br>
+                Type: ${motor.type.charAt(0).toUpperCase() + motor.type.slice(1)}<br>
+                Torque: ${motor.torque} Nm<br>
+                RPM: ${motor.rpm}<br>
+                Voltage: ${motor.voltage} V<br>
+                Wattage: ${motor.wattage} W
+            </div>
+        `;
+        resultDiv.appendChild(card);
+    });
 
-    } else {
-        resultDiv.textContent = "No matching motors found. Try adjusting your specs.";
-    }
+    // Give the DOM time to render the new content before measuring height
+    requestAnimationFrame(() => {
+        const modalHeight = modalContent.offsetHeight;
+        const newTop = (window.innerHeight - modalHeight) / 2;
+        modalContent.style.top = `${newTop}px`;
+        modalContent.style.transform = "none"; // remove vertical translate if using top in pixels
+    });
+  } else {
+      resultDiv.textContent = "No matching motors found. Try adjusting your specs.";
+  }
 });
     </script>
   </body>
