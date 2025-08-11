@@ -228,7 +228,7 @@
     ];
 
         // Modal functionality
-        const motorModal = document.getElementById("motorModal");
+    const motorModal = document.getElementById("motorModal");
     const openMotorBtn = document.getElementById("openMotorModal");
     const closeMotorBtn = document.getElementById("closeMotorModal");
     const modalContent = document.getElementById("modalContent");
@@ -253,11 +253,6 @@
 
     openMotorBtn.onclick = () => {
       motorModal.style.display = "block";
-      // Clear previous results (optional, if you want fresh start)
-      document.getElementById('result').innerHTML = '';
-      // Reset any transform styles
-      modalContent.style.transform = 'none';
-      // Center modal vertically on open
       centerModal();
     };
 
