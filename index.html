@@ -249,8 +249,11 @@
   }
 
   openMotorBtn.onclick = () => {
-    motorModal.style.display = "block";
-    setTimeout(centerModal, 0); // ensures DOM is painted before centering
+  motorModal.style.display = "block";
+
+    requestAnimationFrame(() => {
+      centerModal(); // Center after the browser paints the modal
+    });
   };
 
   closeMotorBtn.onclick = () => {
