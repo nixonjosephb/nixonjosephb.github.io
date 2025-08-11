@@ -85,7 +85,6 @@
             border-radius: 10px;
             width: 90%;
             max-width: 400px;
-            max-height: 110vh;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             text-align: left;
             position: relative;
@@ -96,7 +95,7 @@
 
         /* When showing motor results, lift modal higher */
         .modal-content.show-results {
-            top: 40%; /* You can adjust to 15% or 10% if needed */
+            top: 45%; /* You can adjust to 15% or 10% if needed */
         }
         .close {
             color: #aaa;
@@ -239,7 +238,12 @@
         const openMotorBtn = document.getElementById('openMotorModal');
         const closeMotorBtn = document.getElementById('closeMotorModal');
 
-        openMotorBtn.onclick = () => motorModal.style.display = 'block';
+        openMotorBtn.onclick = () => {
+            const modalContent = document.querySelector('.modal-content');
+            modalContent.style.top = '50%';
+            modalContent.style.transform = 'translateY(-50%)';
+            motorModal.style.display = 'block';
+        };
         closeMotorBtn.onclick = () => motorModal.style.display = 'none';
         window.onclick = (event) => {
             if (event.target === motorModal) motorModal.style.display = 'none';
@@ -303,10 +307,19 @@ document.getElementById('motorForm').addEventListener('submit', function (e) {
             `;
             resultDiv.appendChild(card);
         });
-    } else {
-        resultDiv.textContent = "No matching motors found. Try adjusting your specs.";
-    }
-});
+    setTimeout(() => {
+                const modalContent = document.querySelector('.modal-content');
+                const modalHeight = modalContent.offsetHeight;
+                const windowHeight = window.innerHeight;
+
+                const topValue = (windowHeight - modalHeight) / 2;
+                modalContent.style.top = `${topValue}px`;
+                modalContent.style.transform = `translateY(0)`;
+            }, 0);
+        } else {
+            resultDiv.textContent = "No matching motors found. Try adjusting your specs.";
+        }
+    });
 </script>
 
 </body>
