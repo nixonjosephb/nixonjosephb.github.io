@@ -183,10 +183,37 @@
     <script>
         // Example motor database
         const motors = [
-            { name: "Motor A", torque: 1.2, rpm: 1500, voltage: 24, wattage: 300 },
-            { name: "Motor B", torque: 2.0, rpm: 1000, voltage: 48, wattage: 500 },
-            { name: "Motor C", torque: 0.8, rpm: 3000, voltage: 12, wattage: 150 }
-        ];
+        {
+            name: "Motor A",
+            torque: 1.2,
+            rpm: 1500,
+            voltage: 24,
+            wattage: 300,
+            type: "brushed",
+            image: "C21 Image.png",
+            link: "https://www.magmotor.com/data-sheet-c21"
+        },
+        {
+            name: "Motor B",
+            torque: 2.0,
+            rpm: 1000,
+            voltage: 48,
+            wattage: 500,
+            type: "brushless",
+            image: "C33 Image.png",
+            link: "https://www.magmotor.com/data-sheet-c26"
+        },
+        {
+            name: "Motor C",
+            torque: 0.8,
+            rpm: 3000,
+            voltage: 12,
+            wattage: 150,
+            type: "brushed",
+            image: "C32 Image.png",
+            link: "https://www.magmotor.com/data-sheet-c32"
+        }
+    ];
 
         // Modal functionality
         const motorModal = document.getElementById('motorModal');
