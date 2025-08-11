@@ -30,11 +30,57 @@
             background-color: #007BFF;
             border: none;
             border-radius: 8px;
-            text-decoration: none;
+            cursor: pointer;
             transition: background-color 0.3s;
         }
         .button:hover {
             background-color: #0056b3;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: left;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            padding: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
         }
     </style>
 </head>
@@ -43,7 +89,75 @@
     <h1>Welcome to the Motor Selection Tool</h1>
     <p>Choose your perfect motor by customizing torque, RPM, voltage, and wattage.</p>
 
-    <a href="motor-selector.html" class="button">Customize Your Motor</a>
+    <button class="button" id="openModal">Customize Your Motor</button>
+
+    <!-- Modal -->
+    <div id="motorModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Motor Selector</h2>
+            <form id="motorForm">
+                <label>Torque (Nm):
+                    <input type="number" step="0.01" id="torque" required>
+                </label>
+                <label>RPM:
+                    <input type="number" id="rpm" required>
+                </label>
+                <label>Voltage (V):
+                    <input type="number" id="voltage" required>
+                </label>
+                <label>Wattage (W):
+                    <input type="number" id="wattage" required>
+                </label>
+                <button type="submit" class="button" style="margin-top:15px;">Find Motor</button>
+            </form>
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Example motor database
+        const motors = [
+            { name: "Motor A", torque: 1.2, rpm: 1500, voltage: 24, wattage: 300 },
+            { name: "Motor B", torque: 2.0, rpm: 1000, voltage: 48, wattage: 500 },
+            { name: "Motor C", torque: 0.8, rpm: 3000, voltage: 12, wattage: 150 }
+        ];
+
+        // Modal functionality
+        const modal = document.getElementById('motorModal');
+        const openBtn = document.getElementById('openModal');
+        const closeBtn = document.getElementById('closeModal');
+
+        openBtn.onclick = () => modal.style.display = 'block';
+        closeBtn.onclick = () => modal.style.display = 'none';
+        window.onclick = (event) => {
+            if (event.target === modal) modal.style.display = 'none';
+        };
+
+        // Motor selector logic
+        document.getElementById('motorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const torque = parseFloat(document.getElementById('torque').value);
+            const rpm = parseInt(document.getElementById('rpm').value);
+            const voltage = parseInt(document.getElementById('voltage').value);
+            const wattage = parseInt(document.getElementById('wattage').value);
+
+            const match = motors.find(motor =>
+                motor.torque >= torque &&
+                motor.rpm >= rpm &&
+                motor.voltage === voltage &&
+                motor.wattage >= wattage
+            );
+
+            const resultDiv = document.getElementById('result');
+            if (match) {
+                resultDiv.textContent = `Recommended Motor: ${match.name}`;
+            } else {
+                resultDiv.textContent = "No matching motor found. Try adjusting your specs.";
+            }
+        });
+    </script>
 
 </body>
 </html>
