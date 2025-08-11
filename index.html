@@ -267,9 +267,7 @@ document.getElementById('motorForm').addEventListener('submit', function (e) {
     const maxWattage = Math.max(...motors.map(m => m.wattage));
 
     const resultDiv = document.getElementById('result');
-    const modalContent = document.querySelector('.modal-content');
     resultDiv.innerHTML = ''; // Clear previous results
-    modalContent.classList.remove('show-results'); // Reset class
 
     const matches = motors.filter(motor => {
         const typeMatch = motor.type === type;
@@ -277,12 +275,12 @@ document.getElementById('motorForm').addEventListener('submit', function (e) {
         const rpmMatch = motor.rpm >= rpmMin && motor.rpm <= rpmMax;
         const voltageMatch = (voltage === maxVoltage) ? motor.voltage === voltage : true;
         const wattageMatch = (wattage === maxWattage) ? motor.wattage >= wattage : true;
-
         return typeMatch && torqueMatch && rpmMatch && voltageMatch && wattageMatch;
     });
 
+    const modalContent = document.querySelector('.modal-content');
+
     if (matches.length > 0) {
-        modalContent.classList.add('show-results'); // 💡 Push modal higher
         matches.forEach(motor => {
             const card = document.createElement("div");
             card.className = "motor-card";
@@ -307,20 +305,18 @@ document.getElementById('motorForm').addEventListener('submit', function (e) {
             `;
             resultDiv.appendChild(card);
         });
-    setTimeout(() => {
-                const modalContent = document.querySelector('.modal-content');
-                const modalHeight = modalContent.offsetHeight;
-                const windowHeight = window.innerHeight;
 
-                const topValue = (windowHeight - modalHeight) / 2;
-                modalContent.style.top = `${topValue}px`;
-                modalContent.style.transform = `translateY(0)`;
-            }, 0);
-        } else {
-            resultDiv.textContent = "No matching motors found. Try adjusting your specs.";
-        }
-    });
-</script>
+        // 🛠 Recenter modal with updated height
+        requestAnimationFrame(() => {
+            const modalHeight = modalContent.offsetHeight;
+            modalContent.style.top = "50%";
+            modalContent.style.transform = `translateY(-${modalHeight / 2}px)`;
+        });
 
-</body>
+    } else {
+        resultDiv.textContent = "No matching motors found. Try adjusting your specs.";
+    }
+});
+    </script>
+  </body>
 </html>
