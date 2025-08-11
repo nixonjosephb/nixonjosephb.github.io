@@ -199,30 +199,73 @@
             if (event.target === motorModal) motorModal.style.display = 'none';
         };
 
-        // Motor selector logic
-        document.getElementById('motorForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+document.getElementById('motorForm').addEventListener('submit', function (e) {
+        e.preventDefault();
 
-            const torque = parseFloat(document.getElementById('torque').value);
-            const rpm = parseInt(document.getElementById('rpm').value);
-            const voltage = parseInt(document.getElementById('voltage').value);
-            const wattage = parseInt(document.getElementById('wattage').value);
+        // Read input values
+        const type = document.getElementById('motorType').value;
+        const torque = parseFloat(document.getElementById('torque').value);
+        const rpm = parseInt(document.getElementById('rpm').value);
+        const voltage = parseInt(document.getElementById('voltage').value);
+        const wattage = parseInt(document.getElementById('wattage').value);
 
-            const match = motors.find(motor =>
-                motor.torque >= torque &&
-                motor.rpm >= rpm &&
-                motor.voltage === voltage &&
-                motor.wattage >= wattage
-            );
+        // Calculate tolerance ranges
+        const torqueMin = torque * 0.95;
+        const torqueMax = torque * 1.05;
+        const rpmMin = rpm * 0.95;
+        const rpmMax = rpm * 1.05;
 
-            const resultDiv = document.getElementById('result');
-            if (match) {
-                resultDiv.textContent = `Recommended Motor: ${match.name}`;
-            } else {
-                resultDiv.textContent = "No matching motor found. Try adjusting your specs.";
-            }
+        // Find maximum voltage and wattage in dataset
+        const maxVoltage = Math.max(...motors.map(m => m.voltage));
+        const maxWattage = Math.max(...motors.map(m => m.wattage));
+
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = ''; // Clear previous results
+
+        const matches = motors.filter(motor => {
+            const typeMatch = motor.type === type;
+            const torqueMatch = motor.torque >= torqueMin && motor.torque <= torqueMax;
+            const rpmMatch = motor.rpm >= rpmMin && motor.rpm <= rpmMax;
+
+            // Voltage is only considered if user inputs the max
+            const voltageMatch = (voltage === maxVoltage) ? motor.voltage === voltage : true;
+
+            // Same for wattage
+            const wattageMatch = (wattage === maxWattage) ? motor.wattage >= wattage : true;
+
+            return typeMatch && torqueMatch && rpmMatch && voltageMatch && wattageMatch;
         });
-    </script>
+
+        if (matches.length > 0) {
+            matches.forEach(motor => {
+                const card = document.createElement("div");
+                card.className = "motor-card";
+                card.style.marginTop = "20px";
+                card.style.padding = "10px";
+                card.style.border = "1px solid #ddd";
+                card.style.borderRadius = "10px";
+                card.style.textAlign = "center";
+
+                card.innerHTML = `
+                    <a href="${motor.link}" target="_blank">
+                        <img src="${motor.image}" alt="${motor.name}" class="motor-image" style="max-width: 100%; height: auto; margin-bottom: 10px;">
+                    </a>
+                    <div class="motor-info">
+                        <strong>${motor.name}</strong><br>
+                        Type: ${motor.type.charAt(0).toUpperCase() + motor.type.slice(1)}<br>
+                        Torque: ${motor.torque} Nm<br>
+                        RPM: ${motor.rpm}<br>
+                        Voltage: ${motor.voltage} V<br>
+                        Wattage: ${motor.wattage} W
+                    </div>
+                `;
+                resultDiv.appendChild(card);
+            });
+        } else {
+            resultDiv.textContent = "No matching motors found. Try adjusting your specs.";
+        }
+    });
+</script>
 
 </body>
 </html>
