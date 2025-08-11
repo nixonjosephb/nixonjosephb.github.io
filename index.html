@@ -15,6 +15,51 @@
             align-items: center;
             height: 100vh;
         }
+        .banner {
+          background-color: #f4a261; /* example banner color, change as you like */
+          padding: 30px 20px 60px; /* bottom padding more to fit shaky line */
+          position: relative;
+          text-align: center;
+          font-family: 'Comic Sans MS', cursive, sans-serif; /* hand-drawn vibe */
+          box-sizing: border-box;
+        }
+
+        .banner-text h1 {
+          margin: 0;
+          font-size: 2.5rem;
+          font-weight: bold;
+          color: white;
+          text-shadow: 1px 1px 0 #00000055; /* subtle shadow for readability */
+        }
+
+        .banner-text p {
+          margin: 5px 0 25px;
+          font-size: 1.2rem;
+          color: white;
+          font-style: italic;
+        }
+
+        /* your existing .button-container styles should remain or adjust as needed */
+
+        .shaky-border {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 40px;
+          pointer-events: none; /* so it doesn’t interfere with clicks */
+        }
+
+        /* optional: add a subtle hand-drawn jitter animation */
+        @keyframes shaky {
+          0%, 100% { transform: translate(0, 0); }
+          25% { transform: translate(1px, -1px); }
+          50% { transform: translate(-1px, 1px); }
+          75% { transform: translate(1px, 1px); }
+        }
+        .shaky-border path {
+          animation: shaky 3s infinite ease-in-out;
+        }
 
         /* Container for all buttons */
         .button-container {
@@ -128,71 +173,80 @@
     </style>
 </head>
 <body>
-
+  <div class="banner">
+    <div class="banner-text">
+      <h1>Your Slogan Here</h1>
+      <p>Extra Words here</p>
+    </div>
     <!-- Section of Buttons -->
-    <div class="button-container">
-      <button class="square-button" id="openMotorModal">
-        <div class ="button-content">
-          <div class ="icon-wrapper">
-            <img src="Motor Image for Website Button-no background.png" alt="Motor Icon" class="button-icon">
-          </div>
-          <span class="button-text">Customize your own motor</span>
-        </div>
-      </button>
 
-      <button class="square-button">
-        <div class ="button-content">
-          <div class ="icon-wrapper">
-            <img src="Shop Image for Website Button-no background.png" alt="Store Icon" class="button-icon">
-          </div>
-          <span class="button-text">Shop Our Store Now</span>
+  <div class="button-container">
+    <button class="square-button" id="openMotorModal">
+      <div class ="button-content">
+        <div class ="icon-wrapper">
+          <img src="Motor Image for Website Button-no background.png" alt="Motor Icon" class="button-icon">
         </div>
-      </button>
+        <span class="button-text">Customize your own motor</span>
+      </div>
+    </button>
 
-      <button class="square-button">
-        <div class ="button-content">
-          <div class ="icon-wrapper">
-            <img src="Quote Request Image for Website Button-no background.png" alt="Quote Icon" class="button-icon">
-          </div>
-          <span class="button-text">Request for Quote</span>
+    <button class="square-button">
+      <div class ="button-content">
+        <div class ="icon-wrapper">
+          <img src="Shop Image for Website Button-no background.png" alt="Store Icon" class="button-icon">
         </div>
-      </button>
-    </div>
+        <span class="button-text">Shop Our Store Now</span>
+      </div>
+    </button>
 
-    <!-- Modal -->
-    <div id="motorModal" class="modal">
-        <div class="modal-content" id="modalContent">
-            <span class="close" id="closeMotorModal">&times;</span>
-            <h2>Motor Selector</h2>
-              <form id="motorForm">
-                <label>Motor Type:
-                    <select id="motorType" required>
-                        <option value="">--Select Motor Type--</option>
-                        <option value="brushed">Brushed</option>
-                        <option value="brushless">Brushless</option>
-                    </select>
-                </label>
-                <label>Torque (Nm):
-                    <input type="number" step="0.01" id="torque" required>
-                </label>
-                <label>RPM:
-                    <input type="number" id="rpm" required>
-                </label>
-                <label>Voltage (V):
-                    <input type="number" id="voltage" required>
-                </label>
-                <label>Wattage (W):
-                    <input type="number" id="wattage" required>
-                </label>
-                <button type="submit" class="square-button" style="width:100%; height:auto; padding:10px; margin-top:15px;">
-                    Find Motor
-                </button>
-            </form>
-            <div class="result" id="result"></div>
+    <button class="square-button">
+      <div class ="button-content">
+        <div class ="icon-wrapper">
+          <img src="Quote Request Image for Website Button-no background.png" alt="Quote Icon" class="button-icon">
         </div>
-    </div>
+        <span class="button-text">Request for Quote</span>
+      </div>
+    </button>
+  </div>
 
-    <script>
+  <!-- Modal -->
+  <div id="motorModal" class="modal">
+      <div class="modal-content" id="modalContent">
+          <span class="close" id="closeMotorModal">&times;</span>
+          <h2>Motor Selector</h2>
+            <form id="motorForm">
+              <label>Motor Type:
+                  <select id="motorType" required>
+                      <option value="">--Select Motor Type--</option>
+                      <option value="brushed">Brushed</option>
+                      <option value="brushless">Brushless</option>
+                  </select>
+              </label>
+              <label>Torque (Nm):
+                  <input type="number" step="0.01" id="torque" required>
+              </label>
+              <label>RPM:
+                  <input type="number" id="rpm" required>
+              </label>
+              <label>Voltage (V):
+                  <input type="number" id="voltage" required>
+              </label>
+              <label>Wattage (W):
+                  <input type="number" id="wattage" required>
+              </label>
+              <button type="submit" class="square-button" style="width:100%; height:auto; padding:10px; margin-top:15px;">
+                  Find Motor
+              </button>
+          </form>
+          <div class="result" id="result"></div>
+      </div>
+  </div>
+  <svg class="shaky-banner" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 5 Q10 7 20 5 T40 5 T60 5 T80 5 T100 5" stroke="#333" stroke-width="2" fill="none" />
+  </svg>
+  </div>
+
+  <script>
         // Example motor database
         const motors = [
         {
@@ -250,11 +304,11 @@
   const resultDiv = document.getElementById("result");
   resultDiv.innerHTML = `
   <div style="text-align: center;">
-    <p>No off the shelf motors found.</p>
+    <p>No off-the-shelf motors found.</p>
     <label for="quoteEmail">Enter your email to request a quote:</label>
     <input type="email" id="quoteEmail" placeholder="your.email@example.com" style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;" />
     <button id="quoteBtn" style="margin-top: 10px; padding: 10px 20px; font-size: 1rem; cursor: pointer;">
-      Request a quote on a custom motor that could meet all specs?
+      Request a quote on a custom motor that could meet all your specifications
     </button>
     <p id="quoteMessage" style="color: green; margin-top: 10px;"></p>
   </div>
