@@ -131,7 +131,7 @@
           <div class ="icon-wrapper">
             <img src="Motor Image for Website Button-no background.png" alt="Motor Icon" class="button-icon">
           </div>
-          <span class="button-text">Build your own motor</span>
+          <span class="button-text">Choose your own motor</span>
         </div>
       </button>
 
@@ -160,6 +160,12 @@
             <span class="close" id="closeMotorModal">&times;</span>
             <h2>Motor Selector</h2>
             <form id="motorForm">
+                <lable>Motor Type:
+                  <select id="motorType" required>
+                    <option value="">--Select Motor Type--</option>
+                    <option value="brushed">Brushed</option>
+                    <option value="brushless">Brushless</option>
+                </lable>
                 <label>Torque (Nm):
                     <input type="number" step="0.01" id="torque" required>
                 </label>
@@ -183,45 +189,92 @@
     <script>
         // Example motor database
         const motors = [
-            { name: "Motor A", torque: 1.2, rpm: 1500, voltage: 24, wattage: 300 },
-            { name: "Motor B", torque: 2.0, rpm: 1000, voltage: 48, wattage: 500 },
-            { name: "Motor C", torque: 0.8, rpm: 3000, voltage: 12, wattage: 150 }
-        ];
+    {
+        name: "Motor A",
+        torque: 1.2,
+        rpm: 1500,
+        voltage: 24,
+        wattage: 300,
+        type: "brushed",
+        image: "motorA.png",
+        link: "https://yourwebsite.com/motorA"
+    },
+    {
+        name: "Motor B",
+        torque: 2.0,
+        rpm: 1000,
+        voltage: 48,
+        wattage: 500,
+        type: "brushless",
+        image: "motorB.png",
+        link: "https://yourwebsite.com/motorB"
+    },
+    {
+        name: "Motor C",
+        torque: 0.8,
+        rpm: 3000,
+        voltage: 12,
+        wattage: 150,
+        type: "brushed",
+        image: "motorC.png",
+        link: "https://yourwebsite.com/motorC"
+    }
+];
 
-        // Modal functionality
-        const motorModal = document.getElementById('motorModal');
-        const openMotorBtn = document.getElementById('openMotorModal');
-        const closeMotorBtn = document.getElementById('closeMotorModal');
+document.getElementById('motorForm').addEventListener('submit', function (e) {
+    e.preventDefault();
 
-        openMotorBtn.onclick = () => motorModal.style.display = 'block';
-        closeMotorBtn.onclick = () => motorModal.style.display = 'none';
-        window.onclick = (event) => {
-            if (event.target === motorModal) motorModal.style.display = 'none';
-        };
+    const type = document.getElementById('motorType').value;
+    const torque = parseFloat(document.getElementById('torque').value);
+    const rpm = parseInt(document.getElementById('rpm').value);
+    const voltage = parseInt(document.getElementById('voltage').value);
+    const wattage = parseInt(document.getElementById('wattage').value);
 
-        // Motor selector logic
-        document.getElementById('motorForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = "";
 
-            const torque = parseFloat(document.getElementById('torque').value);
-            const rpm = parseInt(document.getElementById('rpm').value);
-            const voltage = parseInt(document.getElementById('voltage').value);
-            const wattage = parseInt(document.getElementById('wattage').value);
+    const maxVoltage = Math.max(...motors.map(m => m.voltage));
+    const maxWattage = Math.max(...motors.map(m => m.wattage));
 
-            const match = motors.find(motor =>
-                motor.torque >= torque &&
-                motor.rpm >= rpm &&
-                motor.voltage === voltage &&
-                motor.wattage >= wattage
-            );
+    const torqueMin = torque * 0.95;
+    const torqueMax = torque * 1.05;
+    const rpmMin = rpm * 0.95;
+    const rpmMax = rpm * 1.05;
 
-            const resultDiv = document.getElementById('result');
-            if (match) {
-                resultDiv.textContent = `Recommended Motor: ${match.name}`;
-            } else {
-                resultDiv.textContent = "No matching motor found. Try adjusting your specs.";
-            }
+    const matches = motors.filter(motor => {
+        const typeMatch = motor.type === type;
+        const torqueMatch = motor.torque >= torqueMin && motor.torque <= torqueMax;
+        const rpmMatch = motor.rpm >= rpmMin && motor.rpm <= rpmMax;
+        const voltageMatch = (voltage === maxVoltage) || (motor.voltage === voltage);
+        const wattageMatch = (wattage === maxWattage) || (motor.wattage >= wattage);
+
+        return typeMatch && torqueMatch && rpmMatch && voltageMatch && wattageMatch;
+    });
+
+    if (matches.length > 0) {
+        matches.forEach(motor => {
+            const card = document.createElement("div");
+            card.className = "motor-card";
+
+            card.innerHTML = `
+                <a href="${motor.link}" target="_blank">
+                    <img src="${motor.image}" alt="${motor.name}" class="motor-image">
+                </a>
+                <div class="motor-info">
+                    <strong>${motor.name}</strong><br>
+                    Type: ${motor.type.charAt(0).toUpperCase() + motor.type.slice(1)}<br>
+                    Torque: ${motor.torque} Nm<br>
+                    RPM: ${motor.rpm}<br>
+                    Voltage: ${motor.voltage} V<br>
+                    Wattage: ${motor.wattage} W
+                </div>
+            `;
+            resultDiv.appendChild(card);
         });
+    } else {
+        resultDiv.textContent = "No matching motors found. Try adjusting your specs.";
+    }
+});
     </script>
 
 </body>
