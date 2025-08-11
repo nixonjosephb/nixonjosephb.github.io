@@ -16,14 +16,21 @@
             height: 100vh;
         }
 
-        /* Square button */
-        .button {
+        /* Container for all buttons */
+        .button-container {
+            display: flex;
+            gap: 20px; /* space between buttons */
+            flex-wrap: wrap; /* wrap on smaller screens */
+        }
+
+        /* General square button style */
+        .square-button {
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
             padding: 10px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             color: white;
             background-color: #007BFF;
@@ -33,8 +40,9 @@
             transition: background-color 0.3s, transform 0.1s;
             width: 150px;
             height: 150px;
+            box-sizing: border-box;
         }
-        .button:hover {
+        .square-button:hover {
             background-color: #0056b3;
             transform: scale(1.05);
         }
@@ -98,13 +106,17 @@
 </head>
 <body>
 
-    <!-- Square Button -->
-    <button class="button" id="openModal">Build your own motor</button>
+    <!-- Section of Buttons -->
+    <div class="button-container">
+        <button class="square-button" id="openMotorModal">Build your own motor</button>
+        <button class="square-button">Another Feature</button>
+        <button class="square-button">Request for Quote</button>
+    </div>
 
     <!-- Modal -->
     <div id="motorModal" class="modal">
         <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
+            <span class="close" id="closeMotorModal">&times;</span>
             <h2>Motor Selector</h2>
             <form id="motorForm">
                 <label>Torque (Nm):
@@ -119,7 +131,9 @@
                 <label>Wattage (W):
                     <input type="number" id="wattage" required>
                 </label>
-                <button type="submit" class="button" style="width:100%; height:auto; padding:10px; margin-top:15px;">Find Motor</button>
+                <button type="submit" class="square-button" style="width:100%; height:auto; padding:10px; margin-top:15px;">
+                    Find Motor
+                </button>
             </form>
             <div class="result" id="result"></div>
         </div>
@@ -134,14 +148,14 @@
         ];
 
         // Modal functionality
-        const modal = document.getElementById('motorModal');
-        const openBtn = document.getElementById('openModal');
-        const closeBtn = document.getElementById('closeModal');
+        const motorModal = document.getElementById('motorModal');
+        const openMotorBtn = document.getElementById('openMotorModal');
+        const closeMotorBtn = document.getElementById('closeMotorModal');
 
-        openBtn.onclick = () => modal.style.display = 'block';
-        closeBtn.onclick = () => modal.style.display = 'none';
+        openMotorBtn.onclick = () => motorModal.style.display = 'block';
+        closeMotorBtn.onclick = () => motorModal.style.display = 'none';
         window.onclick = (event) => {
-            if (event.target === modal) modal.style.display = 'none';
+            if (event.target === motorModal) motorModal.style.display = 'none';
         };
 
         // Motor selector logic
