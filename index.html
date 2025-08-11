@@ -30,6 +30,7 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            flex-direction: column;
             padding: 10px;
             font-size: 1rem;/*rem = root em, 1 rem = 16px*/
             font-weight: bolder;/*font weight of button*/
@@ -43,10 +44,19 @@
             height: 100px;/*height of the button boxes*/
             box-sizing: border-box;
             box-shadow: 4px 6px 10px 0 rgba(0,0,0,0.3);/*horizontal offset, vertical offset, blur radius, spread radius, color*/
-        }
+          }
         .square-button:hover {
             background-color: #0056b3;
             transform: scale(1.05);
+        }
+        .button-icon{
+          width:48px;
+          height:48px;
+          margin-bottom: 10px;
+        }
+        .button-text{
+          display: block;
+          font-size: 1rem;
         }
 
         /* Modal styles */
