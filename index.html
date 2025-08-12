@@ -251,7 +251,7 @@
               <label>
                 Wattage:
                 <div class="input-with-unit">
-                  <input type="number" id="wattage" required>
+                  <input type="number" step="0.01" id="wattage" required>
                   <select id="wattageUnit">
                     <option value="W">W</option>
                     <option value="hp">hp</option>
@@ -404,6 +404,17 @@
     let wattage = parseFloat(document.getElementById("wattage").value);
     const torqueUnit = document.getElementById("torqueUnit").value;
     const wattageUnit = document.getElementById("wattageUnit").value;
+
+      torque = Math.ceil(torque * 100) / 100;
+      rpm = Math.ceil(rpm); // round rpm up to whole number if needed
+      voltage = Math.ceil(voltage); // same for voltage
+      wattage = Math.ceil(wattage * 100) / 100;
+
+      // Optional: show rounded values in the form fields
+      document.getElementById("torque").value = torque.toFixed(2);
+      document.getElementById("rpm").value = rpm;
+      document.getElementById("voltage").value = voltage;
+      document.getElementById("wattage").value = wattage.toFixed(2);
 
     if (torqueUnit === "ozin") {
       torque = torque * 0.00706155; // oz-in to Nm
