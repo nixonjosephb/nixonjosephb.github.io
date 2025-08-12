@@ -95,10 +95,10 @@
         .splash-separator {
           position: relative;
           width: 100%;
-          height: 100px;
+          height: 120px;
           overflow: hidden;
           line-height: 0;
-          margin-top: -5px; /* removes the tiny gap if any */
+          margin-top: -5px; /* eliminate any gap under the banner */
         }
 
         .splash-separator svg {
@@ -108,7 +108,7 @@
         }
 
         .splash-shape {
-          fill: #707070; /* Change this to match your banner background color */
+          fill: currentColor; /* adopts the color of the parent container */
         }
 
         /* Modal styles */
@@ -213,7 +213,13 @@
   </div>
   <div class="splash-separator">
     <svg viewBox="0 0 1200 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path class="splash-shape" d="M0,80 C100,140 180,60 300,100 C400,130 500,30 600,80 C700,130 800,30 900,90 C1000,130 1100,40 1200,80 L1200,200 L0,200 Z"/>
+      <path class="splash-shape"
+            d="M0,80 
+               C150,120 250,40 350,100 
+               C450,160 550,60 650,120 
+               C750,180 850,70 950,130 
+               C1050,190 1150,50 1200,90 
+               L1200,200 L0,200 Z"/>
     </svg>
   </div>
 
