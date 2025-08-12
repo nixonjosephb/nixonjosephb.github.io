@@ -35,7 +35,9 @@
             z-index: 2;
             position: relative;
         }
-
+        .banner-wrapper {
+          position: relative;
+        }
         .slogan {
           font-size: 2.5rem;
           color: #ffffff;
@@ -96,10 +98,14 @@
           font-weight: bolder;/*font weight of button*/
         }
         .splash-separator {
-          display: block;
-          width: 100%;
+          position: absolute;
+          bottom: 0; /* align with bottom of banner */
+          left: 50%;
+          transform: translateX(-50%) rotate(180deg);
+          z-index: 3; /* higher than banner-content's z-index 2 */
+          width: 100%; /* or your desired width */
           height: auto;
-          transform: rotate(180deg);
+          pointer-events: none; /* optional: make SVG click-through */
         }
 
         /* Modal styles */
@@ -165,43 +171,45 @@
     </style>
 </head>
 <body>
-  <div class="banner">
-    <div class="banner-content">
-        <h1 class="slogan">Designed by Engineers. Engineered with Purpose.</h1>
-        <p class="subtext">Motion solutions engineered and built to solve real-world challenges—custom or standard, simple or complex.</p>
-        <div class="button-container">
-            <button class="square-button" id="openMotorModal">
-                <div class="button-content">
-                    <div class="icon-wrapper">
-                        <img src="Motor Image for Website Button-no background.png" alt="Motor Icon" class="button-icon">
-                    </div>
-                    <span class="button-text">Customize your own motor</span>
-                </div>
-            </button>
-            <a href="https://magmotorstore.com/" target="_blank" style="text-decoration: none;">
-                <button class="square-button">
-                    <div class="button-content">
-                        <div class="icon-wrapper">
-                            <img src="Shop Image for Website Button-no background.png" alt="Store Icon" class="button-icon">
-                        </div>
-                        <span class="button-text">Shop Our Store Now</span>
-                    </div>
-                </button>
-            </a>
-            <a href="https://www.magmotor.com/request-for-quote" target="_blank" style="text-decoration: none;">
-                <button class="square-button">
-                    <div class="button-content">
-                        <div class="icon-wrapper">
-                            <img src="Quote Request Image for Website Button-no background.png" alt="Quote Icon" class="button-icon">
-                        </div>
-                        <span class="button-text">Request for Quote</span>
-                    </div>
-                </button>
-            </a>
-        </div>
+  <div class="banner-wrapper">
+    <div class="banner">
+      <div class="banner-content">
+          <h1 class="slogan">Designed by Engineers. Engineered with Purpose.</h1>
+          <p class="subtext">Motion solutions engineered and built to solve real-world challenges—custom or standard, simple or complex.</p>
+          <div class="button-container">
+              <button class="square-button" id="openMotorModal">
+                  <div class="button-content">
+                      <div class="icon-wrapper">
+                          <img src="Motor Image for Website Button-no background.png" alt="Motor Icon" class="button-icon">
+                      </div>
+                      <span class="button-text">Customize your own motor</span>
+                  </div>
+              </button>
+              <a href="https://magmotorstore.com/" target="_blank" style="text-decoration: none;">
+                  <button class="square-button">
+                      <div class="button-content">
+                          <div class="icon-wrapper">
+                              <img src="Shop Image for Website Button-no background.png" alt="Store Icon" class="button-icon">
+                          </div>
+                          <span class="button-text">Shop Our Store Now</span>
+                      </div>
+                  </button>
+              </a>
+              <a href="https://www.magmotor.com/request-for-quote" target="_blank" style="text-decoration: none;">
+                  <button class="square-button">
+                      <div class="button-content">
+                          <div class="icon-wrapper">
+                              <img src="Quote Request Image for Website Button-no background.png" alt="Quote Icon" class="button-icon">
+                          </div>
+                          <span class="button-text">Request for Quote</span>
+                      </div>
+                  </button>
+              </a>
+          </div>
+      </div>
     </div>
-  </div>
-<img src="BelowBanner.svg" alt="Ink Splash Separator" class="splash-separator">
+    <img src="BelowBanner.svg" alt="Ink Splash Separator" class="splash-separator">
+  </div>  
   <!-- Modal -->
   <div id="motorModal" class="modal">
       <div class="modal-content" id="modalContent">
