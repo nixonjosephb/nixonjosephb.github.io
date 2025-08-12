@@ -276,16 +276,11 @@
         }
     ];
 
-  // Modal functionality
+        // Modal functionality
   const motorModal = document.getElementById("motorModal");
   const openMotorBtn = document.getElementById("openMotorModal");
   const closeMotorBtn = document.getElementById("closeMotorModal");
   const modalContent = document.getElementById("modalContent");
-
-  const model3DModal = document.getElementById("model3DModal");
-  const open3DBtn = document.getElementById("open3DModal");
-  const close3DBtn = document.getElementById("close3DModal");
-  const model3DModalContent = document.getElementById("model3DModalContent");
 
   function centerModal() {
     const modalHeight = modalContent.offsetHeight;
@@ -354,19 +349,6 @@
     }
   };
 
-  open3DBtn.onclick = () => {
-    model3DModal.style.display = "block";
-    centerModal(model3DModalContent);
-  };
-  close3DBtn.onclick = () => {
-    model3DModal.style.display = "none";
-  };
-  window.onclick = e => {
-    if (e.target === model3DModal) {
-      model3DModal.style.display = "none";
-    }
-  };
-
   document.getElementById("motorForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -432,9 +414,10 @@
   });
 
   window.addEventListener('resize', () => {
-    if (motorModal.style.display === 'block') centerModal(motorModal);
-    if (model3DModal.style.display === 'block') centerModal(model3DModalContent);
-    });
+    if (motorModal.style.display === 'block') {
+      centerModal();
+    }
+  });
 </script>
 </body>
 </html>
