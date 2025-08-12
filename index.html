@@ -152,52 +152,55 @@
           display: block;
         }
     </style>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
   <div class="banner">
   <div class="banner-content">
     <h1 class="slogan">Designed by Engineers. Engineered with Purpose.</h1>
     <p class="subtext">Motion solutions engineered and built to solve real-world challenges—custom or standard, simple or complex.</p>
-    <div class="button-container">
-      <button class="square-button" id="openMotorModal">
-        <div class="button-content">
-          <div class="icon-wrapper">
-            <img src="Motor Image for Website Button-no background.png" alt="Motor Icon" class="button-icon">
+      <div class="button-container">
+        <button class="square-button" id="openMotorModal">
+          <div class="button-content">
+            <div class="icon-wrapper">
+              <img src="Motor Image for Website Button-no background.png" alt="Motor Icon" class="button-icon">
+            </div>
+            <span class="button-text">Customize your own motor</span>
           </div>
-          <span class="button-text">Customize your own motor</span>
+        </button>
+        <a href="https://magmotorstore.com/" target="_blank" style="text-decoration: none;">
+          <button class="square-button">
+            <div class="button-content">
+              <div class="icon-wrapper">
+                <img src="Shop Image for Website Button-no background.png" alt="Store Icon" class="button-icon">
+              </div>
+              <span class="button-text">Shop Our Store Now</span>
+            </div>
+          </button>
+        </a>
+        <a href="https://www.magmotor.com/request-for-quote" target="_blank" style="text-decoration: none;">
+          <button class="square-button">
+            <div class="button-content">
+              <div class="icon-wrapper">
+                <img src="Quote Request Image for Website Button-no background.png" alt="Quote Icon" class="button-icon">
+              </div>
+              <span class="button-text">Request for Quote</span>
+            </div>
+          </button>
+        </a>
+        <button class="square-button" id="open3DModelModal">
+            <div class="button-content">
+              <div class="icon-wrapper">
+                <img src="3d-icon.png" alt="3D Model Icon" class="button-icon" />
+              </div>
+              <span class="button-text">View 3D Model</span>
+            </div>
+          </button>
         </div>
-      </button>
-      <a href="https://magmotorstore.com/" target="_blank" style="text-decoration: none;">
-        <button class="square-button">
-          <div class="button-content">
-            <div class="icon-wrapper">
-              <img src="Shop Image for Website Button-no background.png" alt="Store Icon" class="button-icon">
-            </div>
-            <span class="button-text">Shop Our Store Now</span>
-          </div>
-        </button>
-      </a>
-      <a href="https://www.magmotor.com/request-for-quote" target="_blank" style="text-decoration: none;">
-        <button class="square-button">
-          <div class="button-content">
-            <div class="icon-wrapper">
-              <img src="Quote Request Image for Website Button-no background.png" alt="Quote Icon" class="button-icon">
-            </div>
-            <span class="button-text">Request for Quote</span>
-          </div>
-        </button>
-      </a>
-      <button class="square-button" id="open3DModelModal">
-          <div class="button-content">
-            <div class="icon-wrapper">
-              <img src="3d-icon.png" alt="3D Model Icon" class="button-icon" />
-            </div>
-            <span class="button-text">View 3D Model</span>
-          </div>
-        </button>
       </div>
-    </div>
-  <!-- Modal -->
+  <!-- Motor Modal -->
   <div id="motorModal" class="modal">
       <div class="modal-content" id="modalContent">
           <span class="close" id="closeMotorModal">&times;</span>
@@ -229,6 +232,13 @@
           <div class="result" id="result"></div>
       </div>
   </div>
+  <!-- 3D Model Modal -->
+    <div id="3DModelModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <div id="modelContainer"></div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -406,6 +416,91 @@
   window.addEventListener('resize', () => {
     if (motorModal.style.display === 'block') {
       centerModal();
+    }
+  });
+
+  const open3DModelModal = document.getElementById("open3DModelModal");
+  const threeDModal = document.getElementById("3DModelModal");
+  const close3DModal = document.getElementById("close3DModal");
+
+  open3DModelModal.addEventListener("click", () => {
+    threeDModal.style.display = "block";
+    init3DModel(); // Load model
+  });
+
+  close3DModal.addEventListener("click", () => {
+    threeDModal.style.display = "none";
+    // Cleanup 3D scene when closed
+    if (window.renderer) {
+      window.renderer.dispose();
+      document.getElementById("threejs-container").innerHTML = "";
+    }
+  });
+
+  // Close on outside click
+  window.addEventListener("click", (e) => {
+    if (e.target === threeDModal) {
+      threeDModal.style.display = "none";
+      if (window.renderer) {
+        window.renderer.dispose();
+        document.getElementById("threejs-container").innerHTML = "";
+      }
+    }
+  });
+
+  function init3DModel() {
+    const container = document.getElementById("threejs-container");
+
+    // Scene setup
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf0f0f0);
+
+    const camera = new THREE.PerspectiveCamera(45, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+    camera.position.set(0, 2, 5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.offsetWidth, container.offsetHeight);
+    container.appendChild(renderer.domElement);
+    window.renderer = renderer;
+
+    // Lights
+    const light = new THREE.HemisphereLight(0xffffff, 0x444444);
+    scene.add(light);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(5, 10, 7.5);
+    scene.add(directionalLight);
+
+    // Controls
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    // Add a sample geometry if no GLTF is available
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshStandardMaterial({ color: 0x007BFF });
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+
+    // Animate
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  }
+
+  // Resize canvas with window
+  window.addEventListener('resize', () => {
+    const container = document.getElementById("threejs-container");
+    if (window.renderer && window.renderer.domElement) {
+      const camera = window.renderer.camera;
+      if (camera) {
+        camera.aspect = container.offsetWidth / container.offsetHeight;
+        camera.updateProjectionMatrix();
+      }
+      window.renderer.setSize(container.offsetWidth, container.offsetHeight);
     }
   });
 </script>
