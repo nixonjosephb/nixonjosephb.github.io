@@ -276,11 +276,16 @@
         }
     ];
 
-        // Modal functionality
+  // Modal functionality
   const motorModal = document.getElementById("motorModal");
   const openMotorBtn = document.getElementById("openMotorModal");
   const closeMotorBtn = document.getElementById("closeMotorModal");
   const modalContent = document.getElementById("modalContent");
+
+  const model3DModal = document.getElementById("model3DModal");
+  const open3DBtn = document.getElementById("open3DModal");
+  const close3DBtn = document.getElementById("close3DModal");
+  const model3DModalContent = document.getElementById("model3DModalContent");
 
   function centerModal() {
     const modalHeight = modalContent.offsetHeight;
@@ -349,6 +354,19 @@
     }
   };
 
+  open3DBtn.onclick = () => {
+    model3DModal.style.display = "block";
+    centerModal(model3DModalContent);
+  };
+  close3DBtn.onclick = () => {
+    model3DModal.style.display = "none";
+  };
+  window.onclick = e => {
+    if (e.target === model3DModal) {
+      model3DModal.style.display = "none";
+    }
+  };
+
   document.getElementById("motorForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -414,95 +432,9 @@
   });
 
   window.addEventListener('resize', () => {
-    if (motorModal.style.display === 'block') {
-      centerModal();
-    }
-  });
-
-  const open3DModelModal = document.getElementById("open3DModelModal");
-  const threeDModal = document.getElementById("3DModelModal");
-  const close3DModal = document.getElementById("close3DModal");
-
-  open3DModelModal.addEventListener("click", () => {
-    threeDModal.style.display = "block";
-    init3DModel(); // Load model
-  });
-
-  close3DModal.addEventListener("click", () => {
-    threeDModal.style.display = "none";
-    // Cleanup 3D scene when closed
-    if (window.renderer) {
-      window.renderer.dispose();
-      document.getElementById("threejs-container").innerHTML = "";
-    }
-  });
-
-  // Close on outside click
-  window.addEventListener("click", (e) => {
-    if (e.target === threeDModal) {
-      threeDModal.style.display = "none";
-      if (window.renderer) {
-        window.renderer.dispose();
-        document.getElementById("threejs-container").innerHTML = "";
-      }
-    }
-  });
-
-  function init3DModel() {
-    const container = document.getElementById("threejs-container");
-
-    // Scene setup
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f0f0);
-
-    const camera = new THREE.PerspectiveCamera(45, container.offsetWidth / container.offsetHeight, 0.1, 1000);
-    camera.position.set(0, 2, 5);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(container.offsetWidth, container.offsetHeight);
-    container.appendChild(renderer.domElement);
-    window.renderer = renderer;
-
-    // Lights
-    const light = new THREE.HemisphereLight(0xffffff, 0x444444);
-    scene.add(light);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(5, 10, 7.5);
-    scene.add(directionalLight);
-
-    // Controls
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-
-    // Add a sample geometry if no GLTF is available
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshStandardMaterial({ color: 0x007BFF });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-
-    // Animate
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    }
-
-    animate();
-  }
-
-  // Resize canvas with window
-  window.addEventListener('resize', () => {
-    const container = document.getElementById("threejs-container");
-    if (window.renderer && window.renderer.domElement) {
-      const camera = window.renderer.camera;
-      if (camera) {
-        camera.aspect = container.offsetWidth / container.offsetHeight;
-        camera.updateProjectionMatrix();
-      }
-      window.renderer.setSize(container.offsetWidth, container.offsetHeight);
-    }
-  });
+    if (motorModal.style.display === 'block') centerModal(motorModal);
+    if (model3DModal.style.display === 'block') centerModal(model3DModalContent);
+    });
 </script>
 </body>
 </html>
