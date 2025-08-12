@@ -151,6 +151,20 @@
             -moz-appearance: textfield;
             appearance: textfield;
         }
+        .input-with-unit {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+        }
+
+        .input-with-unit input {
+          flex: 1;
+        }
+
+        .input-with-unit select {
+          width: 80px;
+          padding: 5px;
+        }
         .result {
             margin-top: 20px;
             font-weight: bold;
@@ -218,8 +232,15 @@
                       <option value="brushless">Brushless</option>
                   </select>
               </label>
-              <label>Torque (Nm):
+              <label>
+                Torque:
+                <div class="input-with-unit">
                   <input type="number" step="0.01" id="torque" required>
+                  <select id="torqueUnit">
+                    <option value="Nm">Nm</option>
+                    <option value="ozin">oz-in</option>
+                  </select>
+                </div>
               </label>
               <label>RPM:
                   <input type="number" id="rpm" required>
@@ -227,8 +248,15 @@
               <label>Voltage (V):
                   <input type="number" id="voltage" required>
               </label>
-              <label>Wattage (W):
+              <label>
+                Wattage:
+                <div class="input-with-unit">
                   <input type="number" id="wattage" required>
+                  <select id="wattageUnit">
+                    <option value="W">W</option>
+                    <option value="hp">hp</option>
+                  </select>
+                </div>
               </label>
                 <label style="text-align: center; width: 100%;">Usage Type:</label>
                 <div style="display: block; text-align:center; justify-content: center; gap: 20px; margin-bottom: 10px;">
@@ -368,10 +396,22 @@
     e.preventDefault();
 
     const type = document.getElementById("motorType").value;
-    const torque = parseFloat(document.getElementById("torque").value);
+    /*const torque = parseFloat(document.getElementById("torque").value);*/
     const rpm = parseInt(document.getElementById("rpm").value);
     const voltage = parseInt(document.getElementById("voltage").value);
-    const wattage = parseInt(document.getElementById("wattage").value);
+    /*const wattage = parseInt(document.getElementById("wattage").value);*/
+    let torque = parseFloat(document.getElementById("torque").value);
+    let wattage = parseFloat(document.getElementById("wattage").value);
+    const torqueUnit = document.getElementById("torqueUnit").value;
+    const wattageUnit = document.getElementById("wattageUnit").value;
+
+    if (torqueUnit === "ozin") {
+      torque = torque * 0.00706155; // oz-in to Nm
+    }
+
+    if (wattageUnit === "hp") {
+      wattage = wattage * 745.7; // hp to watts
+    }
 
     const torqueMin = torque * 0.95;
     const torqueMax = torque * 1.05;
@@ -403,6 +443,22 @@
         card.style.borderRadius = "10px";
         card.style.textAlign = "center";
 
+        let displayTorque = motor.torque;
+        let displayTorqueUnit = "Nm";
+
+        if (torqueUnit === "ozin") {
+          displayTorque = motor.torque / 0.00706155; // Nm to oz-in
+          displayTorqueUnit = "oz-in";
+        }
+
+        let displayWattage = motor.wattage;
+        let displayWattageUnit = "W";
+
+        if (wattageUnit === "hp") {
+          displayWattage = motor.wattage / 745.7; // W to hp
+          displayWattageUnit = "hp";
+        }
+
         card.innerHTML = `
           <a href="${motor.link}" target="_blank">
             <img src="${motor.image}" alt="${motor.name}" class="motor-image" style="max-width: 100%; height: auto; margin-bottom: 10px;">
@@ -410,10 +466,10 @@
           <div class="motor-info">
             <strong>${motor.name}</strong><br>
             Type: ${motor.type.charAt(0).toUpperCase() + motor.type.slice(1)}<br>
-            Torque: ${motor.torque} Nm<br>
+            Torque: ${displayTorque.toFixed(2)} ${displayTorqueUnit}<br>
             RPM: ${motor.rpm}<br>
             Voltage: ${motor.voltage} V<br>
-            Wattage: ${motor.wattage} W
+            Wattage: ${displayWattage.toFixed(2)} ${displayWattageUnit}
           </div>
         `;
         resultDiv.appendChild(card);
