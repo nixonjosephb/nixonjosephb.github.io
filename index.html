@@ -119,6 +119,14 @@
             top: 0; /* let JS control top */
             transition: top 0.3s ease;
         }
+        .modal-content.three-d {
+          width: 80vw;
+          max-width: 900px;
+          height: 80vh;
+          max-height: 700px;
+          padding: 0;
+          overflow: hidden;
+        }
         .close {
             color: #aaa;
             float: right;
@@ -133,25 +141,15 @@
             display: block;
             margin-top: 10px;
         }
-        input {
-            padding: 5px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        /* Remove arrows for all browsers */
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-            appearance: textfield;
-        }
         .result {
             margin-top: 20px;
             font-weight: bold;
             color: #333;
+        }
+        #threejs-container {
+          width: 100%;
+          height: 100%;
+          display: block;
         }
     </style>
 </head>
@@ -189,6 +187,14 @@
           </div>
         </button>
       </a>
+      <button class="square-button" id="open3DModelModal">
+          <div class="button-content">
+            <div class="icon-wrapper">
+              <img src="3d-icon.png" alt="3D Model Icon" class="button-icon" />
+            </div>
+            <span class="button-text">View 3D Model</span>
+          </div>
+        </button>
     </div>
   </div>
   <!-- Modal -->
@@ -224,6 +230,16 @@
       </div>
   </div>
   </div>
+   <div id="model3DModal" class="modal">
+    <div class="modal-content three-d" id="model3DContent">
+      <span class="close" id="close3DModelModal">&times;</span>
+      <div id="threejs-container"></div>
+    </div>
+  </div>
+
+  <!-- Three.js and GLTFLoader from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <script>
         // Example motor database
@@ -402,6 +418,104 @@
       centerModal();
     }
   });
+    const open3DModelBtn = document.getElementById('open3DModelModal');
+    const close3DModelBtn = document.getElementById('close3DModelModal');
+    const model3DModal = document.getElementById('model3DModal');
+    const container = document.getElementById('threejs-container');
+
+    let scene, camera, renderer, model, animationId;
+
+    function init3DModel() {
+      // Clear container first in case of re-open
+      container.innerHTML = '';
+
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xf0f0f0);
+
+      camera = new THREE.PerspectiveCamera(
+        45,
+        container.clientWidth / container.clientHeight,
+        0.1,
+        1000
+      );
+      camera.position.set(0, 2, 5);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
+
+      // Lights
+      const light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(5, 10, 7.5);
+      scene.add(light);
+
+      // Ambient light for softer shadows
+      const ambientLight = new THREE.AmbientLight(0x404040, 1);
+      scene.add(ambientLight);
+
+      // Load GLTF model
+      const loader = new THREE.GLTFLoader();
+      loader.load(
+        '500230124revA.gltf', // <-- replace with your file name or path
+        function (gltf) {
+          model = gltf.scene;
+          scene.add(model);
+          animate();
+        },
+        undefined,
+        function (error) {
+          console.error('An error happened loading the 3D model:', error);
+        }
+      );
+
+      window.addEventListener('resize', onWindowResize);
+    }
+
+    function animate() {
+      animationId = requestAnimationFrame(animate);
+      if (model) {
+        model.rotation.y += 0.01; // Rotate slowly
+      }
+      renderer.render(scene, camera);
+    }
+
+    function onWindowResize() {
+      if (!renderer || !camera) return;
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+
+    function cleanup3DModel() {
+      cancelAnimationFrame(animationId);
+      if (renderer) {
+        renderer.dispose();
+        container.removeChild(renderer.domElement);
+      }
+      scene = null;
+      camera = null;
+      renderer = null;
+      model = null;
+      window.removeEventListener('resize', onWindowResize);
+    }
+
+    open3DModelBtn.onclick = () => {
+      model3DModal.style.display = 'block';
+      init3DModel();
+    };
+
+    close3DModelBtn.onclick = () => {
+      model3DModal.style.display = 'none';
+      cleanup3DModel();
+    };
+
+    window.onclick = (event) => {
+      if (event.target === model3DModal) {
+        model3DModal.style.display = 'none';
+        cleanup3DModel();
+      }
+    };
+
 </script>
 </body>
 </html>
