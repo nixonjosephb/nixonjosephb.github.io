@@ -16,16 +16,15 @@
             height: 100vh;*/
         }
         .banner {
-          position: relative;
-          background-color: #fcd34d;
-          height: 200px;
+          width: 100%;
+          height: 600px;
+          background-color: #707070;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          box-sizing: border-box;
           text-align: center;
-          padding-top: 60px;
-          font-size: 24px;
-          font-weight: bold;
-          overflow: visible; /* Important if SVG overflows */
         }
-
         .banner-content {
           max-width: 1000px;
           width: 100%;
@@ -34,16 +33,6 @@
           align-items: center;
           z-index: 2;
           position: relative;
-        }
-
-        .splash-separator {
-          position: absolute;
-          bottom: -1px; /* Adjust this to control overlap */
-          left: 0;
-          width: 100%;
-          height: auto;
-          display: block;
-          pointer-events: none; /* Optional: makes sure it's not interactive */
         }
         .slogan {
           font-size: 2.5rem;
@@ -234,7 +223,6 @@
           <div class="result" id="result"></div>
       </div>
   </div>
-   <img src="BelowBanner.svg" alt="Ink Splash Separator" class="splash-separator">
   </div>
 
   <script>
