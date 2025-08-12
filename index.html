@@ -16,24 +16,34 @@
             height: 100vh;*/
         }
         .banner {
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-template-rows: 1fr auto;
+          position: relative;
           width: 100%;
-          height: 600px;
+          height: 100vh;
           background-color: #707070;
-          display: flex;
-          justify-content: center;
+          justify-items: center;
           align-items: center;
-          box-sizing: border-box;
           text-align: center;
         }
 
         .banner-content {
-            max-width: 1000px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 2;
-            position: relative;
+          max-width: 1000px;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          z-index: 2;
+          position: relative;
+        }
+
+        .splash-separator {
+          grid-row: 2;
+          width: 100%;
+          height: auto;
+          margin-top: -50px; /* Adjust this value to control the overlap */
+          z-index: 1;
         }
         .slogan {
           font-size: 2.5rem;
@@ -94,17 +104,6 @@
           color: white; /*color of the text on the button*/
           font-weight: bolder;/*font weight of button*/
         }
-        .splash-separator {
-          position: relative;
-          z-index: 5;
-          margin-top: -150px;
-          bottom: 0; /* align with bottom of banner */
-          transform: rotate(180deg);
-          width: 100%; /* or your desired width */
-          height: auto;
-          pointer-events: none; /* optional: make SVG click-through */
-        }
-
         /* Modal styles */
         .modal {
             display: none;
@@ -168,44 +167,43 @@
     </style>
 </head>
 <body>
-  <div>
-    <div class="banner">
-      <div class="banner-content">
-          <h1 class="slogan">Designed by Engineers. Engineered with Purpose.</h1>
-          <p class="subtext">Motion solutions engineered and built to solve real-world challenges—custom or standard, simple or complex.</p>
-          <div class="button-container">
-              <button class="square-button" id="openMotorModal">
-                  <div class="button-content">
-                      <div class="icon-wrapper">
-                          <img src="Motor Image for Website Button-no background.png" alt="Motor Icon" class="button-icon">
-                      </div>
-                      <span class="button-text">Customize your own motor</span>
-                  </div>
-              </button>
-              <a href="https://magmotorstore.com/" target="_blank" style="text-decoration: none;">
-                  <button class="square-button">
-                      <div class="button-content">
-                          <div class="icon-wrapper">
-                              <img src="Shop Image for Website Button-no background.png" alt="Store Icon" class="button-icon">
-                          </div>
-                          <span class="button-text">Shop Our Store Now</span>
-                      </div>
-                  </button>
-              </a>
-              <a href="https://www.magmotor.com/request-for-quote" target="_blank" style="text-decoration: none;">
-                  <button class="square-button">
-                      <div class="button-content">
-                          <div class="icon-wrapper">
-                              <img src="Quote Request Image for Website Button-no background.png" alt="Quote Icon" class="button-icon">
-                          </div>
-                          <span class="button-text">Request for Quote</span>
-                      </div>
-                  </button>
-              </a>
+  <div class="banner">
+  <div class="banner-content">
+    <h1 class="slogan">Designed by Engineers. Engineered with Purpose.</h1>
+    <p class="subtext">Motion solutions engineered and built to solve real-world challenges—custom or standard, simple or complex.</p>
+    <div class="button-container">
+      <button class="square-button" id="openMotorModal">
+        <div class="button-content">
+          <div class="icon-wrapper">
+            <img src="Motor Image for Website Button-no background.png" alt="Motor Icon" class="button-icon">
           </div>
-      </div>
+          <span class="button-text">Customize your own motor</span>
+        </div>
+      </button>
+      <a href="https://magmotorstore.com/" target="_blank" style="text-decoration: none;">
+        <button class="square-button">
+          <div class="button-content">
+            <div class="icon-wrapper">
+              <img src="Shop Image for Website Button-no background.png" alt="Store Icon" class="button-icon">
+            </div>
+            <span class="button-text">Shop Our Store Now</span>
+          </div>
+        </button>
+      </a>
+      <a href="https://www.magmotor.com/request-for-quote" target="_blank" style="text-decoration: none;">
+        <button class="square-button">
+          <div class="button-content">
+            <div class="icon-wrapper">
+              <img src="Quote Request Image for Website Button-no background.png" alt="Quote Icon" class="button-icon">
+            </div>
+            <span class="button-text">Request for Quote</span>
+          </div>
+        </button>
+      </a>
     </div>
-<img src="BelowBanner.svg" alt="Ink Splash Separator" class="splash-separator">
+  </div>
+  <img src="BelowBanner.svg" alt="Ink Splash Separator" class="splash-separator">
+</div>
   <!-- Modal -->
   <div id="motorModal" class="modal">
       <div class="modal-content" id="modalContent">
