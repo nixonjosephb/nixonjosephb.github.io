@@ -16,16 +16,14 @@
             height: 100vh;*/
         }
         .banner {
-          display: grid;
-          grid-template-columns: 1fr;
-          grid-template-rows: 1fr auto;
           position: relative;
-          width: 100%;
-          height: 100vh;
-          background-color: #707070;
-          justify-items: center;
-          align-items: center;
+          background-color: #fcd34d;
+          height: 200px;
           text-align: center;
+          padding-top: 60px;
+          font-size: 24px;
+          font-weight: bold;
+          overflow: visible; /* Important if SVG overflows */
         }
 
         .banner-content {
@@ -39,11 +37,13 @@
         }
 
         .splash-separator {
-          grid-row: 2;
+          position: absolute;
+          bottom: -1px; /* Adjust this to control overlap */
+          left: 0;
           width: 100%;
           height: auto;
-          margin-top: -50px; /* Adjust this value to control the overlap */
-          z-index: 1;
+          display: block;
+          pointer-events: none; /* Optional: makes sure it's not interactive */
         }
         .slogan {
           font-size: 2.5rem;
