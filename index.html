@@ -290,11 +290,11 @@
           <label>Mounting (NEMA Standard):</label>
           <select id="mountingType">
             <option value="">-- Optional --</option>
-            <option value="NEMA17">NEMA 17</option>
-            <option value="NEMA23">NEMA 23</option>
-            <option value="NEMA34">NEMA 34</option>
-            <option value="NEMA42">NEMA 42</option>
-            <option value="NEMA56">NEMA 56</option>
+            <option value="NEMA17">NEMA 17 (42 x 42 mm)</option>
+            <option value="NEMA23">NEMA 23 (57 x 57 mm)</option>
+            <option value="NEMA34">NEMA 34 (86 x 86 mm)</option>
+            <option value="NEMA42">NEMA 42 (110 x 110 mm)</option>
+            <option value="NEMA56">NEMA 56 (140 x 140 mm)</option>
           </select>
         <button type="submit" class="square-button" style="width:100%; height:auto; padding:10px; margin-top:15px;">
           Find Motor
@@ -321,57 +321,30 @@ const motors = [
   { name: "Motor C", torque: 0.8, rpm: 3000, voltage: 12, wattage: 150, type: "brushed", length: 80, lengthUnit: "mm", mounting: "NEMA17", image: "C32 Image.png", link: "https://www.magmotor.com/data-sheet-c32" }
 ];
 
-const nemaSizes = {
-  NEMA17: { width: 42, height: 42 },
-  NEMA23: { width: 57, height: 57 },
-  NEMA34: { width: 86, height: 86 },
-  NEMA42: { width: 110, height: 110 },
-  NEMA56: { width: 140, height: 140 }
-};
-
-function convertFromMM(mm, unit) {
-  if (unit === "cm") return mm / 10;
-  if (unit === "in") return mm / 25.4;
-  return mm;
-}
-
-function updateMountingOptions() {
-  const unit = document.getElementById("lengthUnit").value;
-  const mountingSelect = document.getElementById("mountingType");
-
-  for (let i = 0; i < mountingSelect.options.length; i++) {
-    const opt = mountingSelect.options[i];
-    const nemaKey = opt.value;
-    if (nemaSizes[nemaKey]) {
-      const w = convertFromMM(nemaSizes[nemaKey].width, unit).toFixed(2);
-      const h = convertFromMM(nemaSizes[nemaKey].height, unit).toFixed(2);
-      opt.textContent = `${nemaKey} (${w} x ${h} ${unit})`;
-    }
-  }
-}
-
-document.getElementById("lengthUnit").addEventListener("change", updateMountingOptions);
-updateMountingOptions(); // initial run
-
+/* ----- New reusable matching function ----- */
 function matchMotors(inputs) {
   let { type, torque, torqueUnit, rpm, voltage, wattage, wattageUnit, motorLength, lengthUnit, mountingType } = inputs;
 
+  // Rounding
   torque = Math.ceil(torque * 100) / 100;
   rpm = Math.ceil(rpm);
   voltage = Math.ceil(voltage);
   wattage = Math.ceil(wattage * 100) / 100;
 
+  // Conversions
   if (torqueUnit === "ozin") torque *= 0.00706155;
   if (wattageUnit === "hp") wattage *= 745.7;
 
+  // Length conversion to mm (if provided)
   let lengthInMM = null;
   if (motorLength) {
     motorLength = parseFloat(motorLength);
     if (lengthUnit === "cm") lengthInMM = motorLength * 10;
     else if (lengthUnit === "in") lengthInMM = motorLength * 25.4;
-    else lengthInMM = motorLength;
+    else lengthInMM = motorLength; // already mm
   }
 
+  // Tolerance ranges
   const torqueMin = torque * 0.95;
   const torqueMax = torque * 1.05;
   const rpmMin = rpm * 0.95;
@@ -388,13 +361,15 @@ function matchMotors(inputs) {
       (voltage === maxVoltage ? motor.voltage === voltage : true) &&
       (wattage === maxWattage ? motor.wattage >= wattage : true);
 
+    // Length check if provided
     if (match && lengthInMM !== null) {
       let motorLengthMM = motor.lengthUnit === "cm" ? motor.length * 10 :
                           motor.lengthUnit === "in" ? motor.length * 25.4 :
-                          motor.length;
+                          motor.length; // mm
       match = Math.abs(motorLengthMM - lengthInMM) <= 5; // ±5 mm tolerance
     }
 
+    // Mounting check if provided
     if (match && mountingType) {
       match = motor.mounting === mountingType;
     }
@@ -403,6 +378,118 @@ function matchMotors(inputs) {
   });
 }
 
+/* ----- Helper UI functions ----- */
+function showNoMatchWithQuote() {
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = `
+    <div style="text-align: center;">
+      <p>No off-the-shelf motors found.</p>
+      <label for="quoteEmail">Enter your email to request a quote:</label>
+      <input type="email" id="quoteEmail" placeholder="your.email@example.com" style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;" />
+      <button id="quoteBtn" style="margin-top: 10px; padding: 10px 20px; font-size: 1rem; cursor: pointer;">
+        Request a quote on a custom motor that could meet all your specifications
+      </button>
+      <p id="quoteMessage" style="color: green; margin-top: 10px;"></p>
+    </div>
+  `;
+  const btn = document.getElementById("quoteBtn");
+  const emailInput = document.getElementById("quoteEmail");
+  const messageP = document.getElementById("quoteMessage");
+  btn.addEventListener("click", () => {
+    const email = emailInput.value.trim();
+    const emailValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
+    if (!emailValid) {
+      messageP.style.color = "red";
+      messageP.textContent = "Please enter a valid email address.";
+      return;
+    }
+    messageP.style.color = "green";
+    messageP.textContent = "Quote request submitted, we'll get back to you as soon as possible.";
+    emailInput.disabled = true;
+    btn.disabled = true;
+  });
+}
+
+function renderMatches(matches, torqueUnit, wattageUnit) {
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "";
+  matches.forEach(motor => {
+    const card = document.createElement("div");
+    card.className = "motor-card";
+    card.style.marginTop = "20px";
+    card.style.padding = "10px";
+    card.style.border = "1px solid #ddd";
+    card.style.borderRadius = "10px";
+    card.style.textAlign = "center";
+
+    let displayTorque = motor.torque;
+    let displayTorqueUnit = "Nm";
+    if (torqueUnit === "ozin") {
+      displayTorque = motor.torque / 0.00706155;
+      displayTorqueUnit = "oz-in";
+    }
+    let displayWattage = motor.wattage;
+    let displayWattageUnit = "W";
+    if (wattageUnit === "hp") {
+      displayWattage = motor.wattage / 745.7;
+      displayWattageUnit = "hp";
+    }
+
+    card.innerHTML = `
+      <a href="${motor.link}" target="_blank">
+        <img src="${motor.image}" alt="${motor.name}" class="motor-image" style="max-width: 100%; height: auto; margin-bottom: 10px;">
+      </a>
+      <div class="motor-info">
+        <strong>${motor.name}</strong><br>
+        Type: ${motor.type.charAt(0).toUpperCase() + motor.type.slice(1)}<br>
+        Torque: ${displayTorque.toFixed(2)} ${displayTorqueUnit}<br>
+        RPM: ${motor.rpm}<br>
+        Voltage: ${motor.voltage} V<br>
+        Wattage: ${displayWattage.toFixed(2)} ${displayWattageUnit}
+      </div>
+    `;
+    resultDiv.appendChild(card);
+  });
+}
+
+/* ----- Modal handling ----- */
+const motorModal = document.getElementById("motorModal");
+const openMotorBtn = document.getElementById("openMotorModal");
+const closeMotorBtn = document.getElementById("closeMotorModal");
+const modalContent = document.getElementById("modalContent");
+
+function centerModal() {
+  const modalHeight = modalContent.offsetHeight;
+  const screenHeight = document.documentElement.clientHeight;
+  const newTop = Math.max((screenHeight - modalHeight) / 2, 20);
+  modalContent.style.top = `${newTop}px`;
+}
+
+function resetModal() {
+  document.getElementById('motorForm').reset();
+  document.getElementById('result').innerHTML = '';
+  centerModal();
+}
+
+openMotorBtn.onclick = () => {
+  motorModal.style.display = "block";
+  requestAnimationFrame(() => requestAnimationFrame(centerModal));
+};
+closeMotorBtn.onclick = () => {
+  motorModal.style.display = "none";
+  resetModal();
+};
+window.onclick = event => {
+  if (event.target === motorModal) {
+    motorModal.style.display = "none";
+    resetModal();
+  }
+};
+window.addEventListener('resize', () => {
+  if (motorModal.style.display === 'block') centerModal();
+});
+
+/* ----- Form submission using new match function ----- */
 document.getElementById("motorForm").addEventListener("submit", function(e) {
   e.preventDefault();
   const inputs = {
@@ -412,23 +499,17 @@ document.getElementById("motorForm").addEventListener("submit", function(e) {
     rpm: parseInt(document.getElementById("rpm").value),
     voltage: parseInt(document.getElementById("voltage").value),
     wattage: parseFloat(document.getElementById("wattage").value),
-    wattageUnit: document.getElementById("wattageUnit").value,
-    motorLength: document.getElementById("motorLength").value || null,
-    lengthUnit: document.getElementById("lengthUnit").value,
-    mountingType: document.getElementById("mountingType").value
+    wattageUnit: document.getElementById("wattageUnit").value
   };
   const matches = matchMotors(inputs);
-  const resultsDiv = document.getElementById("results");
-  resultsDiv.innerHTML = "";
   if (matches.length > 0) {
-    matches.forEach(m => {
-      resultsDiv.innerHTML += `<p><strong>${m.name}</strong> - ${m.type}, ${m.torque} Nm, ${m.rpm} RPM, ${m.voltage}V</p>`;
-    });
+    renderMatches(matches, inputs.torqueUnit, inputs.wattageUnit);
   } else {
-    resultsDiv.textContent = "No matches found.";
+    showNoMatchWithQuote();
+    setTimeout(centerModal, 0);
   }
+  requestAnimationFrame(() => requestAnimationFrame(centerModal));
 });
 </script>
-
 </body>
 </html>
