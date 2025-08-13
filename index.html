@@ -316,12 +316,75 @@
 <script>
 /* Example motor database */
 const motors = [
+  // Brushless
+  { name: "BL17A", type: "brushless", mounting: "NEMA17", stackLengths: [42], windings: ["A", "B", "C", "D", "E"] },
+  { name: "BL23A", type: "brushless", mounting: "NEMA23", stackLengths: [50, 70, 90, 110], windings: ["A", "B", "C", "D"] },
+  { name: "BL23B", type: "brushless", mounting: "NEMA23", stackLengths: [55, 75, 95, 115, 135], windings: ["A", "B", "C"] },
+  { name: "BL34A", type: "brushless", mounting: "NEMA34", stackLengths: [85, 105, 125, 145], windings: ["A", "B", "C", "D", "E"] },
+  { name: "BL34B", type: "brushless", mounting: "NEMA34", stackLengths: [90, 110, 130, 150, 170], windings: ["A", "B"] },
+  { name: "BL56A", type: "brushless", mounting: "NEMA56", stackLengths: [150], windings: ["A", "B", "C", "D", "E"] },
+
+  // Brushed
+  { name: "BR17A", type: "brushed", mounting: "NEMA17", stackLengths: [42], windings: ["A", "B", "C", "D", "E"] },
+  { name: "BR23A", type: "brushed", mounting: "NEMA23", stackLengths: [50, 70, 90], windings: ["A", "B", "C"] },
+  { name: "BR23B", type: "brushed", mounting: "NEMA23", stackLengths: [55, 75, 95, 115], windings: ["A", "B", "C", "D"] },
+  { name: "BR34A", type: "brushed", mounting: "NEMA34", stackLengths: [85, 105, 125], windings: ["A", "B", "C", "D", "E"] },
+  { name: "BR34B", type: "brushed", mounting: "NEMA34", stackLengths: [90, 110, 130], windings: ["A", "B"] },
+  { name: "BR42A", type: "brushed", mounting: "NEMA42", stackLengths: [120, 140], windings: ["A", "B", "C"] },
+  { name: "BR42B", type: "brushed", mounting: "NEMA42", stackLengths: [110, 130, 150], windings: ["A", "B"] },
+  { name: "BR56A", type: "brushed", mounting: "NEMA56", stackLengths: [150], windings: ["A", "B", "C", "D"] }
+];
+
+// Unit conversion
+function convertToMM(value, unit) {
+  if (unit === "cm") return value * 10;
+  if (unit === "in") return value * 25.4;
+  return value; // already mm
+}
+
+// Main match motor funnel
+function matchMotor({ motorType, mountingType, maxLength, lengthUnit }) {
+  let results = motors;
+
+  // Step 1: Motor type
+  if (motorType) {
+    results = results.filter(m => m.type === motorType);
+  }
+
+  // Step 2: Mounting geometry
+  if (mountingType) {
+    results = results.filter(m => m.mounting === mountingType);
+  }
+
+  // Step 3: Physical size filtering
+  if (maxLength && lengthUnit) {
+    const maxLengthMM = convertToMM(maxLength, lengthUnit);
+    results = results
+      .map(motor => {
+        const minStack = Math.min(...motor.stackLengths);
+
+        // Eliminate if shortest stack exceeds limit
+        if (minStack > maxLengthMM) return null;
+
+        // Keep only stacks within limit
+        const validStacks = motor.stackLengths.filter(l => l <= maxLengthMM);
+        if (validStacks.length === 0) return null;
+
+        return { ...motor, stackLengths: validStacks };
+      })
+      .filter(Boolean);
+  }
+
+  return results;
+}
+/*
+const motors = [
   { name: "Motor A", torque: 1.2, rpm: 1500, voltage: 24, wattage: 300, type: "brushed", length: 100, lengthUnit: "mm", mounting: "NEMA23", image: "C21 Image.png", link: "https://www.magmotor.com/data-sheet-c21" },
   { name: "Motor B", torque: 2.0, rpm: 1000, voltage: 48, wattage: 500, type: "brushless", length: 120, lengthUnit: "mm", mounting: "NEMA34", image: "C33 Image.png", link: "https://www.magmotor.com/data-sheet-c26" },
   { name: "Motor C", torque: 0.8, rpm: 3000, voltage: 12, wattage: 150, type: "brushed", length: 80, lengthUnit: "mm", mounting: "NEMA17", image: "C32 Image.png", link: "https://www.magmotor.com/data-sheet-c32" }
 ];
 
-/* ----- New reusable matching function ----- */
+
 function matchMotors(inputs) {
   let { type, torque, torqueUnit, rpm, voltage, wattage, wattageUnit, motorLength, lengthUnit, mountingType } = inputs;
 
@@ -377,6 +440,7 @@ function matchMotors(inputs) {
     return match;
   });
 }
+*/
 
 /* ----- Helper UI functions ----- */
 function showNoMatchWithQuote() {
