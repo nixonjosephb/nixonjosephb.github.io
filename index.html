@@ -15,82 +15,78 @@
             height: 100vh;
         }
         .banner {
-          width: 100%;
-          height: 600px;
-          background-color: #707070;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          box-sizing: border-box;
-          text-align: center;
+            width: 100%;
+            height: 600px;
+            background-color: #707070;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            text-align: center;
         }
         .banner-content {
-          max-width: 1000px;
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          position: relative;
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
         }
         .slogan {
-          font-size: 2.5rem;
-          color: #ffffff;
-          margin-bottom: 10px;
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 10px;
         }
-
         .subtext {
-          font-size: 1.2rem;
-          color: #ffffff;
-          margin-bottom: 30px;
+            font-size: 1.2rem;
+            color: #ffffff;
+            margin-bottom: 30px;
         }
-
         .button-container {
-          display: flex;
-          gap: 75px;
-          justify-content: center;
-          flex-wrap: nowrap;
+            display: flex;
+            gap: 75px;
+            justify-content: center;
+            flex-wrap: nowrap;
         }
-        /* General square button style */
         .square-button {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
-          padding: 10px;
-          font-size: 1rem;/*rem = root em, 1 rem = 16px*/
-          background-color: #007BFF; /*color of the button*/
-          border: none;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: background-color 0.3s, transform 0.1s;
-          width: 300px;/*width of the button boxes*/
-          height: 200px;/*height of the button boxes*/
-          box-sizing: border-box;
-          box-shadow: 4px 6px 10px 0 rgba(0,0,0,0.3);/*horizontal offset, vertical offset, blur radius, spread radius, color*/
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 10px;
+            font-size: 1rem;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            width: 300px;
+            height: 200px;
+            box-sizing: border-box;
+            box-shadow: 4px 6px 10px 0 rgba(0,0,0,0.3);
         }
         .square-button:hover {
             background-color: #0056b3;
             transform: scale(1.05);
         }
         .icon-wrapper{
-          height: 150px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .button-icon{
-          max-height: 100%;
-          width: auto;
-          object-fit: contain;
+            max-height: 100%;
+            width: auto;
+            object-fit: contain;
         }
         .button-text{
-          text-align: center;
-          font-size: 1rem;
-          margin-top: 10px;
-          color: white; /*color of the text on the button*/
-          font-weight: bolder;/*font weight of button*/
+            text-align: center;
+            font-size: 1rem;
+            margin-top: 10px;
+            color: white;
+            font-weight: bolder;
         }
-        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -99,9 +95,9 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow-y: auto; /* allow full page scroll */
+            overflow-y: auto;
             background-color: rgba(0,0,0,0.5);
-            padding: 0; /* adds breathing room top/bottom */
+            padding: 0;
         }
         .modal-content {
             background-color: white;
@@ -113,7 +109,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             text-align: left;
             position: relative;
-            top: 0; /* let JS control top */
+            top: 0;
             transition: top 0.3s ease;
         }
         .close {
@@ -130,18 +126,20 @@
             display: block;
             margin-top: 10px;
         }
-        .usage-type-container {
-          display: flex;
-          justify-content: center;
-          gap: 20px;
-          margin-bottom: 10px;
+        .input-with-unit {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
-        input {
+        .input-with-unit input {
+            flex: 1;
             padding: 5px;
-            width: 100%;
             box-sizing: border-box;
         }
-        /* Remove arrows for all browsers */
+        .input-with-unit select {
+            width: 80px;
+            padding: 5px;
+        }
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -151,263 +149,186 @@
             -moz-appearance: textfield;
             appearance: textfield;
         }
-        .input-with-unit {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-        }
-
-        .input-with-unit input {
-          flex: 1;
-        }
-
-        .input-with-unit select {
-          width: 80px;
-          padding: 5px;
-        }
         .result {
             margin-top: 20px;
             font-weight: bold;
             color: #333;
         }
     </style>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/loaders/GLTFLoader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
 <div class="banner">
-  <div class="banner-content">
-    <h1 class="slogan">Designed by Engineers. Engineered with Purpose.</h1>
-    <p class="subtext">Motion solutions engineered and built to solve real-world challenges—custom or standard, simple or complex.</p>
-    <div class="button-container">
-      <button class="square-button" id="openMotorModal">
-        <div class="button-content">
-          <div class="icon-wrapper">
-            <img src="Motor Image for Website Button-no background.png" alt="Motor Icon" class="button-icon">
-          </div>
-          <span class="button-text">Customize your own motor</span>
+    <div class="banner-content">
+        <h1 class="slogan">Designed by Engineers. Engineered with Purpose.</h1>
+        <p class="subtext">Motion solutions engineered and built to solve real-world challenges—custom or standard, simple or complex.</p>
+        <div class="button-container">
+            <button class="square-button" id="openMotorModal">
+                <div class="button-content">
+                    <div class="icon-wrapper">
+                        <img src="Motor Image for Website Button-no background.png" alt="Motor Icon" class="button-icon">
+                    </div>
+                    <span class="button-text">Customize your own motor</span>
+                </div>
+            </button>
+            <a href="https://magmotorstore.com/" target="_blank" style="text-decoration: none;">
+                <button class="square-button">
+                    <div class="button-content">
+                        <div class="icon-wrapper">
+                            <img src="Shop Image for Website Button-no background.png" alt="Store Icon" class="button-icon">
+                        </div>
+                        <span class="button-text">Shop Our Store Now</span>
+                    </div>
+                </button>
+            </a>
+            <a href="https://www.magmotor.com/request-for-quote" target="_blank" style="text-decoration: none;">
+                <button class="square-button">
+                    <div class="button-content">
+                        <div class="icon-wrapper">
+                            <img src="Quote Request Image for Website Button-no background.png" alt="Quote Icon" class="button-icon">
+                        </div>
+                        <span class="button-text">Request for Quote</span>
+                    </div>
+                </button>
+            </a>
+            <button class="square-button" id="open3DModelModal">
+                <div class="button-content">
+                    <div class="icon-wrapper">
+                        <img src="3d Cube Image for Website Button-no background.png" alt="3D Model Icon" class="button-icon" />
+                    </div>
+                    <span class="button-text">View 3D Model</span>
+                </div>
+            </button>
         </div>
-      </button>
-      <a href="https://magmotorstore.com/" target="_blank" style="text-decoration: none;">
-        <button class="square-button">
-          <div class="button-content">
-            <div class="icon-wrapper">
-              <img src="Shop Image for Website Button-no background.png" alt="Store Icon" class="button-icon">
-            </div>
-            <span class="button-text">Shop Our Store Now</span>
-          </div>
-        </button>
-      </a>
-      <a href="https://www.magmotor.com/request-for-quote" target="_blank" style="text-decoration: none;">
-        <button class="square-button">
-          <div class="button-content">
-            <div class="icon-wrapper">
-              <img src="Quote Request Image for Website Button-no background.png" alt="Quote Icon" class="button-icon">
-            </div>
-            <span class="button-text">Request for Quote</span>
-          </div>
-        </button>
-      </a>
-      <button class="square-button" id="open3DModelModal">
-        <div class="button-content">
-          <div class="icon-wrapper">
-            <img src="3d Cube Image for Website Button-no background.png" alt="3D Model Icon" class="button-icon" />
-          </div>
-          <span class="button-text">View 3D Model</span>
+    </div>
+
+    <div id="motorModal" class="modal">
+        <div class="modal-content" id="modalContent">
+            <span class="close" id="closeMotorModal">&times;</span>
+            <h2>Motor Selector</h2>
+            <form id="motorForm">
+                <label>Motor Type:
+                    <select id="motorType" required>
+                        <option value="">--Select Motor Type--</option>
+                        <option value="brushed">Brushed</option>
+                        <option value="brushless">Brushless</option>
+                    </select>
+                </label>
+                <label>
+                    Torque:
+                    <div class="input-with-unit">
+                        <input type="number" step="0.01" id="torque" required>
+                        <select id="torqueUnit">
+                            <option value="Nm">Nm</option>
+                            <option value="ozin">oz-in</option>
+                        </select>
+                    </div>
+                </label>
+                <label>RPM:
+                    <input type="number" id="rpm" required>
+                </label>
+                <label>Voltage (V):
+                    <input type="number" id="voltage" required>
+                </label>
+                <label>
+                    Wattage:
+                    <div class="input-with-unit">
+                        <input type="number" step="0.01" id="wattage" required>
+                        <select id="wattageUnit">
+                            <option value="W">W</option>
+                            <option value="hp">hp</option>
+                        </select>
+                    </div>
+                </label>
+                <label style="text-align: center; width: 100%;">Usage Type:</label>
+                <div style="display: block; text-align:center; gap: 20px; margin-bottom: 10px;">
+                    <label style="display: inline-block; margin-right: 15px;">
+                        <input type="radio" name="usageType" value="continuous" required>
+                        Continuous
+                    </label>
+                    <label style="display: inline-block;">
+                        <input type="radio" name="usageType" value="intermittent">
+                        Intermittent
+                    </label>
+                </div>
+                <hr style="margin: 20px 0;">
+                <label style="text-align: center; width: 100%;">Optional Sizing:</label>
+                <label>
+                    Motor Length:
+                    <div class="input-with-unit">
+                        <input type="number" step="0.1" id="motorLength" placeholder="Leave blank if no preference">
+                        <select id="lengthUnit">
+                            <option value="mm">mm</option>
+                            <option value="cm">cm</option>
+                            <option value="in">inches</option>
+                        </select>
+                    </div>
+                </label>
+                <label>Mounting Type:
+                    <select id="mountingType">
+                        <option value="">--Select Mounting Type--</option>
+                        <option value="flange">Flange</option>
+                        <option value="face">Face</option>
+                        <option value="rear">Rear</option>
+                    </select>
+                </label>
+                <button type="submit" style="margin-top: 15px; padding: 10px 20px; font-size: 1rem; cursor: pointer;">Find Motor</button>
+            </form>
+            <div class="result" id="result"></div>
         </div>
-      </button>
     </div>
-  </div>
-
-  <!-- Motor Modal -->
-  <div id="motorModal" class="modal">
-    <div class="modal-content" id="modalContent">
-      <span class="close" id="closeMotorModal">&times;</span>
-      <h2>Motor Selector</h2>
-      <form id="motorForm">
-        <label>Motor Type:
-          <select id="motorType" required>
-            <option value="">--Select Motor Type--</option>
-            <option value="brushed">Brushed</option>
-            <option value="brushless">Brushless</option>
-          </select>
-        </label>
-        <label>
-          Torque:
-          <div class="input-with-unit">
-            <input type="number" step="0.01" id="torque" required>
-            <select id="torqueUnit">
-              <option value="Nm">Nm</option>
-              <option value="ozin">oz-in</option>
-            </select>
-          </div>
-        </label>
-        <label>RPM:
-          <input type="number" id="rpm" required>
-        </label>
-        <label>Voltage (V):
-          <input type="number" id="voltage" required>
-        </label>
-        <label>
-          Wattage:
-          <div class="input-with-unit">
-            <input type="number" step="0.01" id="wattage" required>
-            <select id="wattageUnit">
-              <option value="W">W</option>
-              <option value="hp">hp</option>
-            </select>
-          </div>
-        </label>
-        <label style="text-align: center; width: 100%;">Usage Type:</label>
-        <div style="display: block; text-align:center; gap: 20px; margin-bottom: 10px;">
-          <label style="display: inline-block; margin-right: 15px;">
-            <input type="radio" name="usageType" value="continuous" required>
-            Continuous
-          </label>
-          <label style="display: inline-block;">
-            <input type="radio" name="usageType" value="intermittent">
-            Intermittent
-          </label>
-        </div>
-        <hr style="margin: 20px 0;">
-          <label style="text-align: center; width: 100%;">Optional Sizing:</label>
-
-          <!-- Motor Length -->
-          <label>
-            Motor Length:
-            <div class="input-with-unit">
-              <input type="number" step="0.1" id="motorLength" placeholder="Leave blank if no preference">
-              <select id="lengthUnit">
-                <option value="mm">mm</option>
-                <option value="cm">cm</option>
-                <option value="in">inches</option>
-              </select>
-            </div>
-          </label>
-
-          <!-- Mounting Type -->
-          <label>Mounting (NEMA Standard):</label>
-          <select id="mountingType">
-            <option value="">-- Optional --</option>
-            <option value="NEMA17">NEMA 17 (42 x 42 mm)</option>
-            <option value="NEMA23">NEMA 23 (57 x 57 mm)</option>
-            <option value="NEMA34">NEMA 34 (86 x 86 mm)</option>
-            <option value="NEMA42">NEMA 42 (110 x 110 mm)</option>
-            <option value="NEMA56">NEMA 56 (140 x 140 mm)</option>
-          </select>
-        <button type="submit" class="square-button" style="width:100%; height:auto; padding:10px; margin-top:15px;">
-          Find Motor
-        </button>
-      </form>
-      <div class="result" id="result"></div>
-    </div>
-  </div>
-
-  <!-- 3D Model Modal -->
-  <div id="3DModelModal" class="modal">
-    <div class="modal-content">
-      <span id="closeModal" class="close">&times;</span>
-      <div id="modelContainer"></div>
-    </div>
-  </div>
 </div>
 
 <script>
-/* Example motor database */
 const motors = [
-  // Brushless
-  { name: "BL17A", type: "brushless", mounting: "NEMA17", stackLengths: [42], windings: ["A", "B", "C", "D", "E"] },
-  { name: "BL23A", type: "brushless", mounting: "NEMA23", stackLengths: [50, 70, 90, 110], windings: ["A", "B", "C", "D"] },
-  { name: "BL23B", type: "brushless", mounting: "NEMA23", stackLengths: [55, 75, 95, 115, 135], windings: ["A", "B", "C"] },
-  { name: "BL34A", type: "brushless", mounting: "NEMA34", stackLengths: [85, 105, 125, 145], windings: ["A", "B", "C", "D", "E"] },
-  { name: "BL34B", type: "brushless", mounting: "NEMA34", stackLengths: [90, 110, 130, 150, 170], windings: ["A", "B"] },
-  { name: "BL56A", type: "brushless", mounting: "NEMA56", stackLengths: [150], windings: ["A", "B", "C", "D", "E"] },
-
-  // Brushed
-  { name: "BR17A", type: "brushed", mounting: "NEMA17", stackLengths: [42], windings: ["A", "B", "C", "D", "E"] },
-  { name: "BR23A", type: "brushed", mounting: "NEMA23", stackLengths: [50, 70, 90], windings: ["A", "B", "C"] },
-  { name: "BR23B", type: "brushed", mounting: "NEMA23", stackLengths: [55, 75, 95, 115], windings: ["A", "B", "C", "D"] },
-  { name: "BR34A", type: "brushed", mounting: "NEMA34", stackLengths: [85, 105, 125], windings: ["A", "B", "C", "D", "E"] },
-  { name: "BR34B", type: "brushed", mounting: "NEMA34", stackLengths: [90, 110, 130], windings: ["A", "B"] },
-  { name: "BR42A", type: "brushed", mounting: "NEMA42", stackLengths: [120, 140], windings: ["A", "B", "C"] },
-  { name: "BR42B", type: "brushed", mounting: "NEMA42", stackLengths: [110, 130, 150], windings: ["A", "B"] },
-  { name: "BR56A", type: "brushed", mounting: "NEMA56", stackLengths: [150], windings: ["A", "B", "C", "D"] }
+  { name: "Motor A", type: "brushless", torque: 1.2, rpm: 3000, voltage: 12, wattage: 15, length: 50, lengthUnit: "mm", mounting: "flange", link: "#", image: "motorA.png" },
+  { name: "Motor B", type: "brushed", torque: 0.8, rpm: 2800, voltage: 12, wattage: 10, length: 45, lengthUnit: "mm", mounting: "face", link: "#", image: "motorB.png" },
+  { name: "Motor C", type: "brushless", torque: 1.5, rpm: 3200, voltage: 24, wattage: 20, length: 55, lengthUnit: "mm", mounting: "rear", link: "#", image: "motorC.png" }
 ];
 
-// Unit conversion
-function convertToMM(value, unit) {
-  if (unit === "cm") return value * 10;
-  if (unit === "in") return value * 25.4;
-  return value; // already mm
-}
+const motorModal = document.getElementById("motorModal");
+const openMotorBtn = document.getElementById("openMotorModal");
+const closeMotorBtn = document.getElementById("closeMotorModal");
 
-// Main match motor funnel
-function matchMotor({ motorType, mountingType, maxLength, lengthUnit }) {
-  let results = motors;
+openMotorBtn.addEventListener("click", () => motorModal.style.display = "block");
+closeMotorBtn.addEventListener("click", () => motorModal.style.display = "none");
+window.addEventListener("click", (e) => { if(e.target === motorModal) motorModal.style.display = "none"; });
 
-  // Step 1: Motor type
-  if (motorType) {
-    results = results.filter(m => m.type === motorType);
+document.getElementById("motorForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const type = document.getElementById("motorType").value;
+  const torque = parseFloat(document.getElementById("torque").value);
+  const torqueUnit = document.getElementById("torqueUnit").value;
+  const rpm = parseFloat(document.getElementById("rpm").value);
+  const voltage = parseFloat(document.getElementById("voltage").value);
+  const wattage = parseFloat(document.getElementById("wattage").value);
+  const wattageUnit = document.getElementById("wattageUnit").value;
+  const motorLength = document.getElementById("motorLength").value;
+  const lengthUnit = document.getElementById("lengthUnit").value;
+  const mountingType = document.getElementById("mountingType").value;
+
+  const matches = matchMotors({ type, torque, torqueUnit, rpm, voltage, wattage, wattageUnit, motorLength, lengthUnit, mountingType });
+
+  if (matches.length > 0) {
+    renderMatches(matches, torqueUnit, wattageUnit);
+  } else {
+    showNoMatchWithQuote();
   }
-
-  // Step 2: Mounting geometry
-  if (mountingType) {
-    results = results.filter(m => m.mounting === mountingType);
-  }
-
-  // Step 3: Physical size filtering
-  if (maxLength && lengthUnit) {
-    const maxLengthMM = convertToMM(maxLength, lengthUnit);
-    results = results
-      .map(motor => {
-        const minStack = Math.min(...motor.stackLengths);
-
-        // Eliminate if shortest stack exceeds limit
-        if (minStack > maxLengthMM) return null;
-
-        // Keep only stacks within limit
-        const validStacks = motor.stackLengths.filter(l => l <= maxLengthMM);
-        if (validStacks.length === 0) return null;
-
-        return { ...motor, stackLengths: validStacks };
-      })
-      .filter(Boolean);
-  }
-
-  return results;
-}
-/*
-const motors = [
-  { name: "Motor A", torque: 1.2, rpm: 1500, voltage: 24, wattage: 300, type: "brushed", length: 100, lengthUnit: "mm", mounting: "NEMA23", image: "C21 Image.png", link: "https://www.magmotor.com/data-sheet-c21" },
-  { name: "Motor B", torque: 2.0, rpm: 1000, voltage: 48, wattage: 500, type: "brushless", length: 120, lengthUnit: "mm", mounting: "NEMA34", image: "C33 Image.png", link: "https://www.magmotor.com/data-sheet-c26" },
-  { name: "Motor C", torque: 0.8, rpm: 3000, voltage: 12, wattage: 150, type: "brushed", length: 80, lengthUnit: "mm", mounting: "NEMA17", image: "C32 Image.png", link: "https://www.magmotor.com/data-sheet-c32" }
-];
-
+});
 
 function matchMotors(inputs) {
   let { type, torque, torqueUnit, rpm, voltage, wattage, wattageUnit, motorLength, lengthUnit, mountingType } = inputs;
 
-  // Rounding
-  torque = Math.ceil(torque * 100) / 100;
-  rpm = Math.ceil(rpm);
-  voltage = Math.ceil(voltage);
-  wattage = Math.ceil(wattage * 100) / 100;
-
-  // Conversions
   if (torqueUnit === "ozin") torque *= 0.00706155;
   if (wattageUnit === "hp") wattage *= 745.7;
 
-  // Length conversion to mm (if provided)
   let lengthInMM = null;
   if (motorLength) {
     motorLength = parseFloat(motorLength);
     if (lengthUnit === "cm") lengthInMM = motorLength * 10;
     else if (lengthUnit === "in") lengthInMM = motorLength * 25.4;
-    else lengthInMM = motorLength; // already mm
+    else lengthInMM = motorLength;
   }
 
-  // Tolerance ranges
   const torqueMin = torque * 0.95;
   const torqueMax = torque * 1.05;
   const rpmMin = rpm * 0.95;
@@ -424,15 +345,13 @@ function matchMotors(inputs) {
       (voltage === maxVoltage ? motor.voltage === voltage : true) &&
       (wattage === maxWattage ? motor.wattage >= wattage : true);
 
-    // Length check if provided
     if (match && lengthInMM !== null) {
       let motorLengthMM = motor.lengthUnit === "cm" ? motor.length * 10 :
                           motor.lengthUnit === "in" ? motor.length * 25.4 :
-                          motor.length; // mm
-      match = Math.abs(motorLengthMM - lengthInMM) <= 5; // ±5 mm tolerance
+                          motor.length;
+      match = Math.abs(motorLengthMM - lengthInMM) <= 5;
     }
 
-    // Mounting check if provided
     if (match && mountingType) {
       match = motor.mounting === mountingType;
     }
@@ -440,9 +359,46 @@ function matchMotors(inputs) {
     return match;
   });
 }
-*/
 
-/* ----- Helper UI functions ----- */
+function renderMatches(matches, torqueUnit, wattageUnit) {
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "";
+  matches.forEach(motor => {
+    let displayTorque = motor.torque;
+    let displayTorqueUnit = "Nm";
+    if (torqueUnit === "ozin") {
+      displayTorque = motor.torque / 0.00706155;
+      displayTorqueUnit = "oz-in";
+    }
+    let displayWattage = motor.wattage;
+    let displayWattageUnit = "W";
+    if (wattageUnit === "hp") {
+      displayWattage = motor.wattage / 745.7;
+      displayWattageUnit = "hp";
+    }
+
+    const card = document.createElement("div");
+    card.style.marginTop = "20px";
+    card.style.padding = "10px";
+    card.style.border = "1px solid #ddd";
+    card.style.borderRadius = "10px";
+    card.style.textAlign = "center";
+    card.innerHTML = `
+      <a href="${motor.link}" target="_blank">
+        <img src="${motor.image}" alt="${motor.name}" style="max-width:100%; height:auto;" />
+      </a>
+      <p><strong>${motor.name}</strong></p>
+      <p>Torque: ${displayTorque.toFixed(2)} ${displayTorqueUnit}</p>
+      <p>RPM: ${motor.rpm}</p>
+      <p>Voltage: ${motor.voltage} V</p>
+      <p>Wattage: ${displayWattage.toFixed(2)} ${displayWattageUnit}</p>
+      <p>Length: ${motor.length} ${motor.lengthUnit}</p>
+      <p>Mounting: ${motor.mounting}</p>
+    `;
+    resultDiv.appendChild(card);
+  });
+}
+
 function showNoMatchWithQuote() {
   const resultDiv = document.getElementById("result");
   resultDiv.innerHTML = `
@@ -451,7 +407,7 @@ function showNoMatchWithQuote() {
       <label for="quoteEmail">Enter your email to request a quote:</label>
       <input type="email" id="quoteEmail" placeholder="your.email@example.com" style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;" />
       <button id="quoteBtn" style="margin-top: 10px; padding: 10px 20px; font-size: 1rem; cursor: pointer;">
-        Request a quote on a custom motor that could meet all your specifications
+        Request a quote
       </button>
       <p id="quoteMessage" style="color: green; margin-top: 10px;"></p>
     </div>
@@ -468,112 +424,11 @@ function showNoMatchWithQuote() {
       return;
     }
     messageP.style.color = "green";
-    messageP.textContent = "Quote request submitted, we'll get back to you as soon as possible.";
+    messageP.textContent = "Quote request submitted, we'll get back to you.";
     emailInput.disabled = true;
     btn.disabled = true;
   });
 }
-
-function renderMatches(matches, torqueUnit, wattageUnit) {
-  const resultDiv = document.getElementById("result");
-  resultDiv.innerHTML = "";
-  matches.forEach(motor => {
-    const card = document.createElement("div");
-    card.className = "motor-card";
-    card.style.marginTop = "20px";
-    card.style.padding = "10px";
-    card.style.border = "1px solid #ddd";
-    card.style.borderRadius = "10px";
-    card.style.textAlign = "center";
-
-    let displayTorque = motor.torque;
-    let displayTorqueUnit = "Nm";
-    if (torqueUnit === "ozin") {
-      displayTorque = motor.torque / 0.00706155;
-      displayTorqueUnit = "oz-in";
-    }
-    let displayWattage = motor.wattage;
-    let displayWattageUnit = "W";
-    if (wattageUnit === "hp") {
-      displayWattage = motor.wattage / 745.7;
-      displayWattageUnit = "hp";
-    }
-
-    card.innerHTML = `
-      <a href="${motor.link}" target="_blank">
-        <img src="${motor.image}" alt="${motor.name}" class="motor-image" style="max-width: 100%; height: auto; margin-bottom: 10px;">
-      </a>
-      <div class="motor-info">
-        <strong>${motor.name}</strong><br>
-        Type: ${motor.type.charAt(0).toUpperCase() + motor.type.slice(1)}<br>
-        Torque: ${displayTorque.toFixed(2)} ${displayTorqueUnit}<br>
-        RPM: ${motor.rpm}<br>
-        Voltage: ${motor.voltage} V<br>
-        Wattage: ${displayWattage.toFixed(2)} ${displayWattageUnit}
-      </div>
-    `;
-    resultDiv.appendChild(card);
-  });
-}
-
-/* ----- Modal handling ----- */
-const motorModal = document.getElementById("motorModal");
-const openMotorBtn = document.getElementById("openMotorModal");
-const closeMotorBtn = document.getElementById("closeMotorModal");
-const modalContent = document.getElementById("modalContent");
-
-function centerModal() {
-  const modalHeight = modalContent.offsetHeight;
-  const screenHeight = document.documentElement.clientHeight;
-  const newTop = Math.max((screenHeight - modalHeight) / 2, 20);
-  modalContent.style.top = `${newTop}px`;
-}
-
-function resetModal() {
-  document.getElementById('motorForm').reset();
-  document.getElementById('result').innerHTML = '';
-  centerModal();
-}
-
-openMotorBtn.onclick = () => {
-  motorModal.style.display = "block";
-  requestAnimationFrame(() => requestAnimationFrame(centerModal));
-};
-closeMotorBtn.onclick = () => {
-  motorModal.style.display = "none";
-  resetModal();
-};
-window.onclick = event => {
-  if (event.target === motorModal) {
-    motorModal.style.display = "none";
-    resetModal();
-  }
-};
-window.addEventListener('resize', () => {
-  if (motorModal.style.display === 'block') centerModal();
-});
-
-/* ----- Form submission using new match function ----- */
-document.getElementById("motorForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const inputs = {
-    type: document.getElementById("motorType").value,
-    torque: parseFloat(document.getElementById("torque").value),
-    torqueUnit: document.getElementById("torqueUnit").value,
-    rpm: parseInt(document.getElementById("rpm").value),
-    voltage: parseInt(document.getElementById("voltage").value),
-    wattage: parseFloat(document.getElementById("wattage").value),
-    wattageUnit: document.getElementById("wattageUnit").value
-  };
-  const matches = matchMotors(inputs);
-  if (matches.length > 0) {
-    renderMatches(matches, inputs.torqueUnit, inputs.wattageUnit);
-  } else {
-    showNoMatchWithQuote();
-    setTimeout(centerModal, 0);
-  }
-  requestAnimationFrame(() => requestAnimationFrame(centerModal));
-});
 </script>
 </body>
 </html>
