@@ -270,6 +270,32 @@
             Intermittent
           </label>
         </div>
+        <hr style="margin: 20px 0;">
+          <label style="text-align: center; width: 100%;">Optional Sizing:</label>
+
+          <!-- Motor Length -->
+          <label>
+            Motor Length:
+            <div class="input-with-unit">
+              <input type="number" step="0.1" id="motorLength" placeholder="Leave blank if no preference">
+              <select id="lengthUnit">
+                <option value="mm">mm</option>
+                <option value="cm">cm</option>
+                <option value="in">inches</option>
+              </select>
+            </div>
+          </label>
+
+          <!-- Mounting Type -->
+          <label>Mounting (NEMA Standard):</label>
+          <select id="mountingType">
+            <option value="">-- Optional --</option>
+            <option value="NEMA17">NEMA 17 (42 x 42 mm)</option>
+            <option value="NEMA23">NEMA 23 (57 x 57 mm)</option>
+            <option value="NEMA34">NEMA 34 (86 x 86 mm)</option>
+            <option value="NEMA42">NEMA 42 (110 x 110 mm)</option>
+            <option value="NEMA56">NEMA 56 (140 x 140 mm)</option>
+          </select>
         <button type="submit" class="square-button" style="width:100%; height:auto; padding:10px; margin-top:15px;">
           Find Motor
         </button>
