@@ -355,27 +355,31 @@ function matchMotors(inputs) {
   const maxWattage = Math.max(...motors.map(m => m.wattage));
 
   return motors.filter(motor => {
-    let match =
-      motor.type === type &&
-      motor.torque >= torqueMin && motor.torque <= torqueMax &&
-      motor.rpm >= rpmMin && motor.rpm <= rpmMax &&
-      (voltage === maxVoltage ? motor.voltage === voltage : true) &&
-      (wattage === maxWattage ? motor.wattage >= wattage : true);
+    // 1️⃣ Type check (Brushed vs Brushless)
+    if (motor.type !== type) return false;
 
-    // Length check if provided
-    if (match && lengthInMM !== null) {
+    // 2️⃣ Mounting check if provided
+    if (mountingType && motor.mounting !== mountingType) return false;
+
+    // 3️⃣ Length check if provided
+    if (lengthInMM !== null) {
       let motorLengthMM = motor.lengthUnit === "cm" ? motor.length * 10 :
                           motor.lengthUnit === "in" ? motor.length * 25.4 :
                           motor.length; // mm
-      match = Math.abs(motorLengthMM - lengthInMM) <= 5; // ±5 mm tolerance
+      if (Math.abs(motorLengthMM - lengthInMM) > 5) return false; // ±5 mm tolerance
     }
 
-    // Mounting check if provided
-    if (match && mountingType) {
-      match = motor.mounting === mountingType;
-    }
+    // 4️⃣ Performance checks
+    if (
+      motor.torque < torqueMin || motor.torque > torqueMax ||
+      motor.rpm < rpmMin || motor.rpm > rpmMax
+    ) return false;
 
-    return match;
+    if (voltage !== maxVoltage && motor.voltage !== voltage) return false;
+    if (wattage !== maxWattage && motor.wattage < wattage) return false;
+
+    // Passed all checks
+    return true;
   });
 }
 
