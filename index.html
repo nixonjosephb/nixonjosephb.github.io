@@ -324,7 +324,18 @@ const motors = [
 
 
 function matchMotors(inputs) {
-  let { type, torque, torqueUnit, rpm, voltage, wattage, wattageUnit, motorLength, lengthUnit, mountingType } = inputs;
+  let {
+    type,
+    torque,
+    torqueUnit,
+    rpm,
+    voltage,
+    wattage,
+    wattageUnit,
+    motorLength,   // number or null
+    lengthUnit,    // "mm" | "cm" | "in"
+    mountingType   // optional NEMA*
+  } = inputs;
 
   // Rounding
   torque = Math.ceil(torque * 100) / 100;
@@ -338,14 +349,13 @@ function matchMotors(inputs) {
 
   // Length conversion to mm (if provided)
   let lengthInMM = null;
-  if (motorLength) {
-    motorLength = parseFloat(motorLength);
+  if (motorLength !== null && !isNaN(motorLength)) {
     if (lengthUnit === "cm") lengthInMM = motorLength * 10;
     else if (lengthUnit === "in") lengthInMM = motorLength * 25.4;
-    else lengthInMM = motorLength; // already mm
+    else lengthInMM = motorLength; // mm
   }
 
-  // Tolerance ranges
+  // Tolerances
   const torqueMin = torque * 0.95;
   const torqueMax = torque * 1.05;
   const rpmMin = rpm * 0.95;
@@ -355,30 +365,29 @@ function matchMotors(inputs) {
   const maxWattage = Math.max(...motors.map(m => m.wattage));
 
   return motors.filter(motor => {
-    // 1️⃣ Type check (Brushed vs Brushless)
+    // 1) Type
     if (motor.type !== type) return false;
 
-    // 2️⃣ Mounting check if provided
+    // 2) Mounting (optional)
     if (mountingType && motor.mounting !== mountingType) return false;
 
-    // 3️⃣ Length check if provided
+    // 3) Length (optional, ±5 mm tolerance)
     if (lengthInMM !== null) {
-      let motorLengthMM = motor.lengthUnit === "cm" ? motor.length * 10 :
-                          motor.lengthUnit === "in" ? motor.length * 25.4 :
-                          motor.length; // mm
-      if (Math.abs(motorLengthMM - lengthInMM) > 5) return false; // ±5 mm tolerance
+      const motorLengthMM =
+        motor.lengthUnit === "cm" ? motor.length * 10 :
+        motor.lengthUnit === "in" ? motor.length * 25.4 :
+        motor.length; // mm
+      if (Math.abs(motorLengthMM - lengthInMM) > 5) return false;
     }
 
-    // 4️⃣ Performance checks
-    if (
-      motor.torque < torqueMin || motor.torque > torqueMax ||
-      motor.rpm < rpmMin || motor.rpm > rpmMax
-    ) return false;
+    // 4) Performance checks
+    if (motor.torque < torqueMin || motor.torque > torqueMax) return false;
+    if (motor.rpm < rpmMin || motor.rpm > rpmMax) return false;
 
+    // Voltage/wattage logic (kept as you had it)
     if (voltage !== maxVoltage && motor.voltage !== voltage) return false;
     if (wattage !== maxWattage && motor.wattage < wattage) return false;
 
-    // Passed all checks
     return true;
   });
 }
@@ -498,22 +507,32 @@ window.addEventListener('resize', () => {
 /* ----- Form submission using new match function ----- */
 document.getElementById("motorForm").addEventListener("submit", function(e) {
   e.preventDefault();
+
+  const lengthRaw = document.getElementById("motorLength").value.trim();
   const inputs = {
     type: document.getElementById("motorType").value,
     torque: parseFloat(document.getElementById("torque").value),
     torqueUnit: document.getElementById("torqueUnit").value,
-    rpm: parseInt(document.getElementById("rpm").value),
-    voltage: parseInt(document.getElementById("voltage").value),
+    rpm: parseInt(document.getElementById("rpm").value, 10),
+    voltage: parseInt(document.getElementById("voltage").value, 10),
     wattage: parseFloat(document.getElementById("wattage").value),
-    wattageUnit: document.getElementById("wattageUnit").value
+    wattageUnit: document.getElementById("wattageUnit").value,
+
+    // NEW: pass optional sizing
+    motorLength: lengthRaw === "" ? null : parseFloat(lengthRaw),
+    lengthUnit: document.getElementById("lengthUnit").value,
+    mountingType: document.getElementById("mountingType").value
   };
+
   const matches = matchMotors(inputs);
+
   if (matches.length > 0) {
     renderMatches(matches, inputs.torqueUnit, inputs.wattageUnit);
   } else {
     showNoMatchWithQuote();
     setTimeout(centerModal, 0);
   }
+
   requestAnimationFrame(() => requestAnimationFrame(centerModal));
 });
 </script>
