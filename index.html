@@ -361,105 +361,80 @@ const motors = [
 ];
 */
 
-    let motorData = [];
+let motorData = [];
 
-    fetch('MotorwithWindingDataWithoutMissing.xlsx')
-      .then(response => response.arrayBuffer())
-      .then(data => {
-        const uint8Array = new Uint8Array(data);
-        const workbook = XLSX.read(uint8Array, { type: 'array' });
-        const worksheet = workbook.Sheets['Brushed Motors'];
-        if (!worksheet) throw new Error("Sheet 'Brushed motors' not found!");
-        motorData = XLSX.utils.sheet_to_json(worksheet, { defval: null });
-        console.log(motorData);
-      })
-      .catch(err => console.error("Error loading Excel file:", err));
-    function convertToMM(value, unit) {
-      if (unit === "cm") return value * 10;
-      if (unit === "in") return value * 25.4;
-      return value; // mm
-    }
-  function matchMotors(inputs) {
-    let { type, motorLength, lengthUnit, mountingType, loadTorque, targetRPM, voltage } = inputs;
+fetch('MotorwithWindingDataWithoutMissing.xlsx')
+	.then(response => response.arrayBuffer())
+	.then(data => {
+		const uint8Array = new Uint8Array(data);
+		const workbook = XLSX.read(uint8Array, { type: 'array' });
+		const worksheet = workbook.Sheets['Brushed Motors'];
 
-    let lengthInMM = null;
-    if (motorLength !== null && !isNaN(motorLength)) {
-      if (lengthUnit === "cm") lengthInMM = motorLength * 10;
-      else if (lengthUnit === "in") lengthInMM = motorLength * 25.4;
-      else lengthInMM = motorLength;
-    }
+		if (!worksheet) throw new Error("Sheet 'Brushed Motors' not found!");
 
-    return motorData
-      .map(motor => {
-        if (motor["Motor Type"].toLowerCase() !== type.toLowerCase()) return null;
-        if (mountingType && motor["Mounting Type"] !== mountingType) return null;
-        if (lengthInMM !== null && Math.abs(motor["Motor Length"] - lengthInMM) > 5) return null;
+		motorData = XLSX.utils.sheet_to_json(worksheet, { defval: null });
+		console.log(motorData);
+	})
+	.catch(err => console.error("Error loading Excel file:", err));
 
-        const Ke = parseFloat(motor["Ke"]);
-        const Rt = parseFloat(motor["Rt"]);
-        const safeVoltage = parseFloat(voltage) || 0;
-        const safeLoadTorque = parseFloat(loadTorque) || 0;
+function matchMotors(inputs) {
+	let { type, motorLength, lengthUnit, mountingType, loadTorque, targetRPM, voltage } = inputs;
 
-        if (!Ke || !Rt) {
-          motor.achievableRPM = NaN; // mark it invalid
-          return null; // skip this motor
-        }
+	let lengthInMM = null;
+	if (motorLength !== null && !isNaN(motorLength)) {
+		if (lengthUnit === "cm") lengthInMM = motorLength * 10;
+		else if (lengthUnit === "in") lengthInMM = motorLength * 25.4;
+		else lengthInMM = motorLength;
+	}
 
-        const achievableRPM =
-          (1000 * safeVoltage) / Ke -
-          ((1000 * Rt * safeLoadTorque) / (Ke * Ke * 1.3524));
+	return motorData.filter(motor => {
+		if (motor["Motor Type"].toLowerCase() !== type.toLowerCase()) return false;
+		if (mountingType && motor["Mounting Type"] !== mountingType) return false;
+		if (lengthInMM !== null && Math.abs(motor["Motor Length"] - lengthInMM) > 5) return false;
 
-        motor.achievableRPM = achievableRPM; // add achievable RPM to motor object
+		const Ke = motor["Ke"];
+		const Rt = motor["Rt"];
+		const achievableRPM = (1000 * voltage) / Ke - ((1000 * Rt * loadTorque) / (Ke * Ke * 1.3524));
 
-        if (achievableRPM < targetRPM) return null;
+		if (achievableRPM < targetRPM) return false;
 
-        return motor;
-      })
-      .filter(m => m !== null);
-  }
+		return true;
+	});
+}
 
-  document.getElementById("motorForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    if (motorData.length === 0) {
-      alert("Motor data not loaded yet.");
-      return;
-    }
+document.getElementById("motorForm").addEventListener("submit", function (e) {
+	e.preventDefault();
 
-    const lengthRaw = document.getElementById("motorLength").value.trim();
-    const inputs = {
-      type: document.getElementById("motorType").value,
-      motorLength: lengthRaw === "" ? null : parseFloat(lengthRaw),
-      lengthUnit: document.getElementById("lengthUnit").value,
-      mountingType: document.getElementById("mountingType").value,
-      loadTorque: parseFloat(document.getElementById("torque").value),
-      targetRPM: parseFloat(document.getElementById("rpm").value),
-      voltage: parseFloat(document.getElementById("voltage").value)
-    };
+	if (motorData.length === 0) {
+		alert("Motor data not loaded yet.");
+		return;
+	}
 
-    const matches = matchMotors(inputs);
-    const resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = "";
+	const lengthRaw = document.getElementById("motorLength").value.trim();
+	const inputs = {
+		type: document.getElementById("motorType").value,
+		motorLength: lengthRaw === "" ? null : parseFloat(lengthRaw),
+		lengthUnit: document.getElementById("lengthUnit").value,
+		mountingType: document.getElementById("mountingType").value,
+		loadTorque: parseFloat(document.getElementById("torque").value),
+		targetRPM: parseFloat(document.getElementById("rpm").value),
+		voltage: parseFloat(document.getElementById("voltage").value)
+	};
 
-    if (matches.length === 0) {
-      resultDiv.textContent = "No matching motors found.";
-    } else {
-      matches.forEach(motor => {
-        const div = document.createElement("div");
-        div.style.marginBottom = "15px";
-        div.style.padding = "10px";
-        div.style.border = "1px solid #ccc";
-        div.style.borderRadius = "8px";
-        div.innerHTML = `
-          <strong>${motor["Motor Name"] || motor.name}</strong><br>
-          Torque: ${motor["Torque"] || motor.torque} Nm<br>
-          Voltage: ${motor["Voltage"] || motor.voltage} V<br>
-          Achievable RPM: ${motor.achievableRPM.toFixed(2)}<br>
-          <a href="${motor.link || '#'}" target="_blank">Data Sheet</a>
-        `;
-        resultDiv.appendChild(div);
-      });
-    }
-  });
+	const matches = matchMotors(inputs);
+	const resultDiv = document.getElementById("result");
+	resultDiv.innerHTML = "";
+
+	if (matches.length === 0) {
+		resultDiv.textContent = "No matching motors found.";
+	} else {
+		matches.forEach(motor => {
+			const div = document.createElement("div");
+			div.textContent = JSON.stringify(motor);
+			resultDiv.appendChild(div);
+		});
+	}
+});
   </script>
 </body>
 </html>
