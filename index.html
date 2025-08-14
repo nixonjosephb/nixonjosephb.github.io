@@ -315,158 +315,6 @@
 </div>
 
 <script>
-/* Example motor database */
-
-const motors = [
-  { name: "Motor A", torque: 1.2, rpm: 1500, voltage: 24, wattage: 300, type: "brushed", length: 100, lengthUnit: "mm", mounting: "NEMA23", image: "C21 Image.png", link: "https://www.magmotor.com/data-sheet-c21" },
-  { name: "Motor B", torque: 2.0, rpm: 1000, voltage: 48, wattage: 500, type: "brushless", length: 120, lengthUnit: "mm", mounting: "NEMA34", image: "C33 Image.png", link: "https://www.magmotor.com/data-sheet-c26" },
-  { name: "Motor C", torque: 0.8, rpm: 3000, voltage: 12, wattage: 150, type: "brushed", length: 80, lengthUnit: "mm", mounting: "NEMA17", image: "C32 Image.png", link: "https://www.magmotor.com/data-sheet-c32" }
-];
-
-
-function matchMotors(inputs) {
-  let {
-    type,
-    torque,
-    torqueUnit,
-    rpm,
-    voltage,
-    wattage,
-    wattageUnit,
-    motorLength,   // number or null
-    lengthUnit,    // "mm" | "cm" | "in"
-    mountingType   // optional NEMA*
-  } = inputs;
-
-  // Rounding
-  torque = Math.ceil(torque * 100) / 100;
-  rpm = Math.ceil(rpm);
-  voltage = Math.ceil(voltage);
-  wattage = Math.ceil(wattage * 100) / 100;
-
-  // Conversions
-  if (torqueUnit === "ozin") torque *= 0.00706155;
-  if (wattageUnit === "hp") wattage *= 745.7;
-
-  // Length conversion to mm (if provided)
-  let lengthInMM = null;
-  if (motorLength !== null && !isNaN(motorLength)) {
-    if (lengthUnit === "cm") lengthInMM = motorLength * 10;
-    else if (lengthUnit === "in") lengthInMM = motorLength * 25.4;
-    else lengthInMM = motorLength; // mm
-  }
-
-  // Tolerances
-  const torqueMin = torque * 0.95;
-  const torqueMax = torque * 1.05;
-  const rpmMin = rpm * 0.95;
-  const rpmMax = rpm * 1.05;
-
-  const maxVoltage = Math.max(...motors.map(m => m.voltage));
-  const maxWattage = Math.max(...motors.map(m => m.wattage));
-
-  return motors.filter(motor => {
-    // 1) Type
-    if (motor.type !== type) return false;
-
-    // 2) Mounting (optional)
-    if (mountingType && motor.mounting !== mountingType) return false;
-
-    // 3) Length (optional, ±5 mm tolerance)
-    if (lengthInMM !== null) {
-      const motorLengthMM =
-        motor.lengthUnit === "cm" ? motor.length * 10 :
-        motor.lengthUnit === "in" ? motor.length * 25.4 :
-        motor.length; // mm
-      if (Math.abs(motorLengthMM - lengthInMM) > 5) return false;
-    }
-
-    // 4) Performance checks
-    if (motor.torque < torqueMin || motor.torque > torqueMax) return false;
-    if (motor.rpm < rpmMin || motor.rpm > rpmMax) return false;
-
-    // Voltage/wattage logic (kept as you had it)
-    if (voltage !== maxVoltage && motor.voltage !== voltage) return false;
-    if (wattage !== maxWattage && motor.wattage < wattage) return false;
-
-    return true;
-  });
-}
-
-
-/* ----- Helper UI functions ----- */
-function showNoMatchWithQuote() {
-  const resultDiv = document.getElementById("result");
-  resultDiv.innerHTML = `
-    <div style="text-align: center;">
-      <p>No off-the-shelf motors found.</p>
-      <label for="quoteEmail">Enter your email to request a quote:</label>
-      <input type="email" id="quoteEmail" placeholder="your.email@example.com" style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;" />
-      <button id="quoteBtn" style="margin-top: 10px; padding: 10px 20px; font-size: 1rem; cursor: pointer;">
-        Request a quote on a custom motor that could meet all your specifications
-      </button>
-      <p id="quoteMessage" style="color: green; margin-top: 10px;"></p>
-    </div>
-  `;
-  const btn = document.getElementById("quoteBtn");
-  const emailInput = document.getElementById("quoteEmail");
-  const messageP = document.getElementById("quoteMessage");
-  btn.addEventListener("click", () => {
-    const email = emailInput.value.trim();
-    const emailValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
-    if (!emailValid) {
-      messageP.style.color = "red";
-      messageP.textContent = "Please enter a valid email address.";
-      return;
-    }
-    messageP.style.color = "green";
-    messageP.textContent = "Quote request submitted, we'll get back to you as soon as possible.";
-    emailInput.disabled = true;
-    btn.disabled = true;
-  });
-}
-
-function renderMatches(matches, torqueUnit, wattageUnit) {
-  const resultDiv = document.getElementById("result");
-  resultDiv.innerHTML = "";
-  matches.forEach(motor => {
-    const card = document.createElement("div");
-    card.className = "motor-card";
-    card.style.marginTop = "20px";
-    card.style.padding = "10px";
-    card.style.border = "1px solid #ddd";
-    card.style.borderRadius = "10px";
-    card.style.textAlign = "center";
-
-    let displayTorque = motor.torque;
-    let displayTorqueUnit = "Nm";
-    if (torqueUnit === "ozin") {
-      displayTorque = motor.torque / 0.00706155;
-      displayTorqueUnit = "oz-in";
-    }
-    let displayWattage = motor.wattage;
-    let displayWattageUnit = "W";
-    if (wattageUnit === "hp") {
-      displayWattage = motor.wattage / 745.7;
-      displayWattageUnit = "hp";
-    }
-
-    card.innerHTML = `
-      <a href="${motor.link}" target="_blank">
-        <img src="${motor.image}" alt="${motor.name}" class="motor-image" style="max-width: 100%; height: auto; margin-bottom: 10px;">
-      </a>
-      <div class="motor-info">
-        <strong>${motor.name}</strong><br>
-        Type: ${motor.type.charAt(0).toUpperCase() + motor.type.slice(1)}<br>
-        Torque: ${displayTorque.toFixed(2)} ${displayTorqueUnit}<br>
-        RPM: ${motor.rpm}<br>
-        Voltage: ${motor.voltage} V<br>
-        Wattage: ${displayWattage.toFixed(2)} ${displayWattageUnit}
-      </div>
-    `;
-    resultDiv.appendChild(card);
-  });
-}
 
 /* ----- Modal handling ----- */
 const motorModal = document.getElementById("motorModal");
@@ -504,38 +352,77 @@ window.onclick = event => {
 window.addEventListener('resize', () => {
   if (motorModal.style.display === 'block') centerModal();
 });
+/* Example motor database */
 
-/* ----- Form submission using new match function ----- */
-document.getElementById("motorForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+const motors = [
+  { name: "Motor A", torque: 1.2, rpm: 1500, voltage: 24, wattage: 300, type: "brushed", length: 100, lengthUnit: "mm", mounting: "NEMA23", image: "C21 Image.png", link: "https://www.magmotor.com/data-sheet-c21" },
+  { name: "Motor B", torque: 2.0, rpm: 1000, voltage: 48, wattage: 500, type: "brushless", length: 120, lengthUnit: "mm", mounting: "NEMA34", image: "C33 Image.png", link: "https://www.magmotor.com/data-sheet-c26" },
+  { name: "Motor C", torque: 0.8, rpm: 3000, voltage: 12, wattage: 150, type: "brushed", length: 80, lengthUnit: "mm", mounting: "NEMA17", image: "C32 Image.png", link: "https://www.magmotor.com/data-sheet-c32" }
+];
 
-  const lengthRaw = document.getElementById("motorLength").value.trim();
-  const inputs = {
-    type: document.getElementById("motorType").value,
-    torque: parseFloat(document.getElementById("torque").value),
-    torqueUnit: document.getElementById("torqueUnit").value,
-    rpm: parseInt(document.getElementById("rpm").value, 10),
-    voltage: parseInt(document.getElementById("voltage").value, 10),
-    wattage: parseFloat(document.getElementById("wattage").value),
-    wattageUnit: document.getElementById("wattageUnit").value,
+    let motorData = [];
 
-    // NEW: pass optional sizing
-    motorLength: lengthRaw === "" ? null : parseFloat(lengthRaw),
-    lengthUnit: document.getElementById("lengthUnit").value,
-    mountingType: document.getElementById("mountingType").value
-  };
+    fetch('motors.xlsx')
+      .then(response => response.arrayBuffer())
+      .then(data => {
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        motorData = XLSX.utils.sheet_to_json(worksheet, { defval: null });
+      })
+      .catch(err => console.error("Error loading Excel file:", err));
 
-  const matches = matchMotors(inputs);
+    function matchMotors(inputs) {
+      let { type, motorLength, lengthUnit, mountingType, loadTorque, targetRPM, voltage } = inputs;
+      let lengthInMM = null;
+      if (motorLength !== null && !isNaN(motorLength)) {
+        if (lengthUnit === "cm") lengthInMM = motorLength * 10;
+        else if (lengthUnit === "in") lengthInMM = motorLength * 25.4;
+        else lengthInMM = motorLength;
+      }
+      return motorData.filter(motor => {
+        if (motor["Motor Type"].toLowerCase() !== type.toLowerCase()) return false;
+        if (mountingType && motor["Mounting Type"] !== mountingType) return false;
+        if (lengthInMM !== null && Math.abs(motor["Motor Length"] - lengthInMM) > 5) return false;
+        const Ke = motor["Ke"];
+        const Rt = motor["Rt"];
+        const achievableRPM =
+          (1000 * voltage) / Ke -
+          ((1000 * Rt * loadTorque) / (Ke * Ke * 1.3524));
+        if (achievableRPM < targetRPM) return false;
+        return true;
+      });
+    }
 
-  if (matches.length > 0) {
-    renderMatches(matches, inputs.torqueUnit, inputs.wattageUnit);
-  } else {
-    showNoMatchWithQuote();
-    setTimeout(centerModal, 0);
-  }
-
-  requestAnimationFrame(() => requestAnimationFrame(centerModal));
-});
-</script>
+    document.getElementById("motorForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (motorData.length === 0) {
+        alert("Motor data not loaded yet.");
+        return;
+      }
+      const lengthRaw = document.getElementById("motorLength").value.trim();
+      const inputs = {
+        type: document.getElementById("motorType").value,
+        motorLength: lengthRaw === "" ? null : parseFloat(lengthRaw),
+        lengthUnit: document.getElementById("lengthUnit").value,
+        mountingType: document.getElementById("mountingType").value,
+        loadTorque: parseFloat(document.getElementById("torque").value),
+        targetRPM: parseFloat(document.getElementById("rpm").value),
+        voltage: parseFloat(document.getElementById("voltage").value)
+      };
+      const matches = matchMotors(inputs);
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
+      if (matches.length === 0) {
+        resultDiv.textContent = "No matching motors found.";
+      } else {
+        matches.forEach(motor => {
+          const div = document.createElement("div");
+          div.textContent = JSON.stringify(motor);
+          resultDiv.appendChild(div);
+        });
+      }
+    });
+  </script>
 </body>
 </html>
