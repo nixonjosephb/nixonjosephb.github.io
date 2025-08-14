@@ -389,13 +389,17 @@ function matchMotors(inputs) {
 
 	return motorData.filter(motor => {
 		if (motor["Motor Type"].toLowerCase() !== type.toLowerCase()) return false;
-		const mountingMatches = mountingType ? motor["Mounting Type"] === mountingType : true;
+		
+    const selectedMounting = mountingType?.trim().toLowerCase();
+    const motorMounting = motor["Mounting Type"]?.trim().toLowerCase();
 
-        // Apply length filter only if user entered a value
-    const lengthMatches = lengthInMM !== null ? motor["Motor Length"] <= lengthInMM : true;
+      if (
+        selectedMounting &&
+        selectedMounting !== "-- optional --" &&
+        motorMounting !== selectedMounting
+      ) return false;
 
-        // Skip if either filter fails (AND logic if both provided)
-    if (!mountingMatches || !lengthMatches) return false;
+		if (lengthInMM !== null && motor["Motor Length"] > lengthInMM) return false;
 
 		const Ke = motor["Ke"];
 		const Rt = motor["Rt"];
