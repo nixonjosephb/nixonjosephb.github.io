@@ -362,13 +362,15 @@ const motors = [
 
     let motorData = [];
 
-    fetch('motors.xlsx')
+    fetch('MotorwithWindingDataWithoutMissing.xlsx')
       .then(response => response.arrayBuffer())
       .then(data => {
-        const workbook = XLSX.read(data, { type: 'array' });
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
+        const uint8Array = new Uint8Array(data);
+        const workbook = XLSX.read(uint8Array, { type: 'array' });
+        const worksheet = workbook.Sheets['Brushed Motors'];
+        if (!worksheet) throw new Error("Sheet 'Brushed motors' not found!");
         motorData = XLSX.utils.sheet_to_json(worksheet, { defval: null });
+        console.log(motorData);
       })
       .catch(err => console.error("Error loading Excel file:", err));
 
