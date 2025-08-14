@@ -390,11 +390,13 @@ function matchMotors(inputs) {
 	return motorData.filter(motor => {
 		if (motor["Motor Type"].toLowerCase() !== type.toLowerCase()) return false;
 		if (mountingType && motor["Mounting Type"] !== mountingType) return false;
-		if (lengthInMM !== null && Math.abs(motor["Motor Length"] - lengthInMM) > 5) return false;
+		if (lengthInMM !== null && motor["Motor Length"] > lengthInMM) return false;
 
 		const Ke = motor["Ke"];
 		const Rt = motor["Rt"];
 		const achievableRPM = (1000 * voltage) / Ke - ((1000 * Rt * loadTorque) / (Ke * Ke * 1.3524));
+
+    motor["Achievable RPM"] = achievableRPM;
 
 		if (achievableRPM < targetRPM) return false;
 
