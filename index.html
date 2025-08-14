@@ -395,11 +395,19 @@ const motors = [
         if (mountingType && motor["Mounting Type"] !== mountingType) return null;
         if (lengthInMM !== null && Math.abs(motor["Motor Length"] - lengthInMM) > 5) return null;
 
-        const Ke = motor["Ke"];
-        const Rt = motor["Rt"];
+        const Ke = parseFloat(motor["Ke"]);
+        const Rt = parseFloat(motor["Rt"]);
+        const safeVoltage = parseFloat(voltage) || 0;
+        const safeLoadTorque = parseFloat(loadTorque) || 0;
+
+        if (!Ke || !Rt) {
+          motor.achievableRPM = NaN; // mark it invalid
+          return null; // skip this motor
+        }
+
         const achievableRPM =
-          (1000 * voltage) / Ke -
-          ((1000 * Rt * loadTorque) / (Ke * Ke * 1.3524));
+          (1000 * safeVoltage) / Ke -
+          ((1000 * Rt * safeLoadTorque) / (Ke * Ke * 1.3524));
 
         motor.achievableRPM = achievableRPM; // add achievable RPM to motor object
 
