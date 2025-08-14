@@ -291,11 +291,11 @@
           <label>Mounting (NEMA Standard):</label>
           <select id="mountingType">
             <option value="">-- Optional --</option>
-            <option value="NEMA17">NEMA 17 (42 x 42 mm)</option>
-            <option value="NEMA23">NEMA 23 (57 x 57 mm)</option>
-            <option value="NEMA34">NEMA 34 (86 x 86 mm)</option>
-            <option value="NEMA42">NEMA 42 (110 x 110 mm)</option>
-            <option value="NEMA56">NEMA 56 (140 x 140 mm)</option>
+            <option value="NEMA 17">NEMA 17 (42 x 42 mm)</option>
+            <option value="NEMA 23">NEMA 23 (57 x 57 mm)</option>
+            <option value="NEMA 34">NEMA 34 (86 x 86 mm)</option>
+            <option value="NEMA 42">NEMA 42 (110 x 110 mm)</option>
+            <option value="NEMA 56">NEMA 56 (140 x 140 mm)</option>
           </select>
         <button type="submit" class="square-button" style="width:100%; height:auto; padding:10px; margin-top:15px;">
           Find Motor
@@ -389,16 +389,7 @@ function matchMotors(inputs) {
 
 	return motorData.filter(motor => {
 		if (motor["Motor Type"].toLowerCase() !== type.toLowerCase()) return false;
-		
-    const selectedMounting = mountingType?.trim().toLowerCase();
-    const motorMounting = motor["Mounting Type"]?.trim().toLowerCase();
-
-      if (
-        selectedMounting &&
-        selectedMounting !== "-- optional --" &&
-        motorMounting !== selectedMounting
-      ) return false;
-
+		if (mountingType && motor["Mounting Type"] !== mountingType) return false;
 		if (lengthInMM !== null && motor["Motor Length"] > lengthInMM) return false;
 
 		const Ke = motor["Ke"];
