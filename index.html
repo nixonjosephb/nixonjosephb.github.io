@@ -394,11 +394,35 @@ function matchMotors(inputs) {
 
 		const Ke = motor["Ke"];
 		const Rt = motor["Rt"];
-		const achievableRPM = (1000 * voltage) / Ke - ((1000 * Rt * loadTorque) / (Ke * Ke * 1.3524));
+    const Io = motor["Io"];
+    const CW = motor["CW"];
+
+    if (Ke == null || Rt == null || Io == null || CW == null) return false;
+
+    const Kt = Ke * 1.3524;
+		const achievableRPM = (1000 * voltage) / Ke - ((1000 * Rt * loadTorque) / (Ke * Kt));
+    const Amperage = loadTorque / (Kt*Io);
+
+    motor["Kt"] = Kt;
+    motor["Amps"] = Amperage;
 
     motor["Achievable RPM"] = achievableRPM;
 
 		if (achievableRPM < targetRPM) return false;
+
+		// Determine temperature limit based on usage type
+		const tempLimit = usageType === "intermittent" ? 100 : 90;
+
+		// Calculate temperature at load torque
+		// Formula: (Voltage * Amperage) - ((loadTorque * RPM_at_loadTorque) / 1352) * CW
+		const mechanicalPower = (loadTorque * achievableRPM) / 1352; // in Watts
+		const electricalPower = voltage * Amperage; // in Watts
+		const tempAtLoad = (electricalPower - mechanicalPower) * CW; // in Celsius
+
+		motor["Temp @ Load"] = tempAtLoad;
+
+		// Temperature check
+		if (tempAtLoad > tempLimit) return false;
 
 		return true;
 	});
