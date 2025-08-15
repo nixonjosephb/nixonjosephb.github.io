@@ -378,7 +378,7 @@ fetch('MotorwithWindingDataWithoutMissing.xlsx')
 	.catch(err => console.error("Error loading Excel file:", err));
 
 function matchMotors(inputs) {
-	let { type, motorLength, lengthUnit, mountingType, loadTorque, targetRPM, voltage } = inputs;
+	let { type, motorLength, lengthUnit, mountingType, loadTorque, targetRPM, voltage, usageType } = inputs;
 
 	let lengthInMM = null;
 	if (motorLength !== null && !isNaN(motorLength)) {
