@@ -477,7 +477,8 @@ document.getElementById("motorForm").addEventListener("submit", function (e) {
 		mountingType: document.getElementById("mountingType").value,
 		loadTorque: parseFloat(document.getElementById("torque").value),
 		targetRPM: parseFloat(document.getElementById("rpm").value),
-		voltage: parseFloat(document.getElementById("voltage").value)
+		voltage: parseFloat(document.getElementById("voltage").value),
+    usageType: document.querySelector('input[name="usageType"]:checked').value,
 	};
 
 	const matches = matchMotors(inputs);
