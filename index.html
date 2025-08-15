@@ -390,8 +390,6 @@ function matchMotors(inputs) {
   let loadTorqueOzIn = loadTorque;
 	if (torqueUnit && torqueUnit.toLowerCase() === "nm") {
 		loadTorqueOzIn = loadTorque * 141.61193;
-	} else if (torqueUnit && torqueUnit.toLowerCase() === "lb-in") {
-		loadTorqueOzIn = loadTorque * 16; // 1 lb·in = 16 oz·in
 	}
 
 	return motorData.filter(motor => {
@@ -408,7 +406,7 @@ function matchMotors(inputs) {
 
     const Kt = Ke * 1.3524;
 		const achievableRPM = (1000 * voltage) / Ke - ((1000 * Rt * loadTorque) / (Ke * Kt));
-    const Amperage = loadTorque / (Kt*Io);
+    const Amperage = (loadTorque/Kt)+Io;
 
     motor["Kt"] = Kt;
     motor["Amps"] = Amperage;
