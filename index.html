@@ -378,13 +378,20 @@ fetch('MotorwithWindingDataWithoutMissing.xlsx')
 	.catch(err => console.error("Error loading Excel file:", err));
 
 function matchMotors(inputs) {
-	let { type, motorLength, lengthUnit, mountingType, loadTorque, targetRPM, voltage, usageType } = inputs;
+	let { type, motorLength, lengthUnit, mountingType, loadTorque, torqueUnit, targetRPM, voltage, usageType } = inputs;
 
 	let lengthInMM = null;
 	if (motorLength !== null && !isNaN(motorLength)) {
 		if (lengthUnit === "cm") lengthInMM = motorLength * 10;
 		else if (lengthUnit === "in") lengthInMM = motorLength * 25.4;
 		else lengthInMM = motorLength;
+	}
+
+  let loadTorqueOzIn = loadTorque;
+	if (torqueUnit && torqueUnit.toLowerCase() === "nm") {
+		loadTorqueOzIn = loadTorque * 141.61193;
+	} else if (torqueUnit && torqueUnit.toLowerCase() === "lb-in") {
+		loadTorqueOzIn = loadTorque * 16; // 1 lb·in = 16 oz·in
 	}
 
 	return motorData.filter(motor => {
